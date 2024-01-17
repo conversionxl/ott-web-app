@@ -2,7 +2,7 @@
 
 // Colors
 
-$primary-color: variables.$white !default;
+$primary-color: variables.$black !default;
 $secondary-color: variables.$blue !default;
 $dark-color: #2b2c39 !default;
 
@@ -10,6 +10,7 @@ $dark-color: #2b2c39 !default;
 
 $body-bg-color: #141523 !default;
 $body-color: variables.$white !default;
+$text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 3px 4px rgba(0, 0, 0, 0.02), 0 1px 5px rgba(0, 0, 0, 0.07);
 
 // Typography
 
@@ -21,7 +22,7 @@ $body-font-weight-bold: 700 !default;
 
 // Buttons
 
-$btn-default-bg: rgba(0, 0, 0, 0.6) !default;
+$btn-default-bg: rgba(0, 0, 0, 0.1) !default;
 $btn-default-color: variables.$white !default;
 
 $btn-primary-bg: variables.$white !default;
@@ -52,7 +53,7 @@ $link-color: #3990ff !default;
 
 // Card
 
-$card-color: variables.$white !default;
+$card-color: $primary-color !default;
 $card-border-hover-color: $primary-color !default;
 $card-tag-bg: $dark-color !default;
 $card-loading-bg-color: $secondary-color !default;

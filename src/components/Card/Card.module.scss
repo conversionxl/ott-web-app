@@ -30,6 +30,7 @@
     .title {
       height: 1.1em;
       padding-right: 8px;
+      color: variables.$white;
       font-family: var(--body-font-family);
       font-size: 34px;
       line-height: 36px;
@@ -152,7 +153,7 @@ $aspects: ((1, 1), (2, 1), (2, 3), (4, 3), (5, 3), (16, 9), (9, 16), (9, 13));
   font-size: 1em;
   line-height: 1.2em;
   text-align: left;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.14), 0 3px 4px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 3px 4px rgba(0, 0, 0, 0.02), 0 1px 5px rgba(0, 0, 0, 0.05);
 
   &.loading {
     width: 30%;
@@ -196,7 +197,7 @@ $aspects: ((1, 1), (2, 1), (2, 3), (4, 3), (5, 3), (16, 9), (9, 16), (9, 13));
   display: flex;
   align-items: center;
   padding: 4px 8px;
-  color: var(--card-color);
+  color: var(--highlight-contrast-color);
   font-family: var(--body-font-family);
   font-weight: 600;
   font-size: 16px;

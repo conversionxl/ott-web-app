@@ -17,9 +17,10 @@
 
 .menuItem {
   padding: 0 18px;
-
+  
   > a {
     margin: 6px 0;
+    color: theme.$body-color;
     font-weight: normal;
   }
 }

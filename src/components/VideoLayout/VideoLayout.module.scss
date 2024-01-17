@@ -117,11 +117,12 @@
 
 .relatedVideosGridTitle {
   margin-right: variables.$base-spacing;
+  color: theme.$primary-color;
   font-family: var(--body-alt-font-family);
   font-weight: var(--body-font-weight-bold);
   font-size: 24px;
   line-height: 26px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.14), 0 3px 4px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
+  text-shadow: theme.$text-shadow;
 }
 
 .relatedVideosListTitle {
@@ -130,7 +131,7 @@
   font-weight: var(--body-font-weight-bold);
   font-size: 20px;
   line-height: 22px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.14), 0 3px 4px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
+  text-shadow: theme.$text-shadow;
 }
 
 .filters {
@@ -148,5 +149,5 @@
 .filterMetadata {
   font-size: 16px;
   text-transform: capitalize;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.14), 0 3px 4px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.2);
+  text-shadow: theme.$text-shadow;
 }
