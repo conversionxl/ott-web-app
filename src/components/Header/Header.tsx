@@ -24,6 +24,13 @@ import AccountCircle from '#src/icons/AccountCircle';
 
 type TypeHeader = 'static' | 'fixed';
 
+type CustomMenuItem = {
+  label: string;
+  url: string;
+  position?: 'before' | 'right' | 'after';
+  key: string;
+};
+
 type Props = {
   headerType?: TypeHeader;
   onMenuButtonClick: () => void;
@@ -48,6 +55,7 @@ type Props = {
   supportedLanguages: LanguageDefinition[];
   currentLanguage: LanguageDefinition | undefined;
   onLanguageClick: (code: string) => void;
+  rightSideItems?: CustomMenuItem[];
 
   favoritesEnabled?: boolean;
 
@@ -85,6 +93,7 @@ const Header: React.FC<Props> = ({
   currentLanguage,
   onLanguageClick,
   favoritesEnabled,
+  rightSideItems,
   profilesData: { currentProfile, profiles, profilesEnabled, selectProfile, isSelectingProfile } = {},
 }) => {
   const { t } = useTranslation('menu');
@@ -206,6 +215,11 @@ const Header: React.FC<Props> = ({
         <nav className={styles.nav} aria-label="menu">
           {logoLoaded || !logoSrc ? children : null}
         </nav>
+        <div className={styles.customActions}>
+          {rightSideItems?.map((item) => (
+            <Button key={item.key} label={item.label} to={item.url} variant="text" />
+          ))}
+        </div>
         <div className={styles.actions}>
           {renderSearch()}
           {renderLanguageDropdown()}

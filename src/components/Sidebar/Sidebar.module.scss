@@ -30,6 +30,7 @@
   width: 270px;
   max-width: 90vw;
   height: 100vh;
+  color: var(--header-contrast-color);
   background-color: var(--body-background-color);
   transform: translateX(-100%);
   transition: transform 0.3s cubic-bezier(0.52, 0.51, 0.2, 1);
@@ -56,6 +57,11 @@
 
     &.open {
       transform: translateX(0);
+    }
+    
+    .menuButton {
+      color: var(--header-contrast-color);
+      opacity: 0.7;
     }
   }
 

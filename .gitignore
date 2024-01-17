@@ -24,3 +24,4 @@ ini/*.ini
 
 # Ignore working area for i18n checks
 .temp-translations
+.env.development

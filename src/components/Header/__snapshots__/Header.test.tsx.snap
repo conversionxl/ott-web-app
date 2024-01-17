@@ -43,6 +43,9 @@ exports[`<Header /> > renders header 1`] = `
         a
       </nav>
       <div
+        class="_customActions_f4f7a7"
+      />
+      <div
         class="_actions_f4f7a7"
       >
         <div

@@ -34,7 +34,29 @@ const Layout = () => {
   const { config, accessModel, clientId } = useConfigStore(({ config, accessModel, clientId }) => ({ config, accessModel, clientId }), shallow);
   const isLoggedIn = !!useAccountStore(({ user }) => user);
   const favoritesEnabled = !!config.features?.favoritesList;
-  const { menu, assets, siteName, description, styling, features } = config;
+  const { menu, assets, siteName, description, styling, features, custom } = config;
+  // custom menu entries entries include all fields in the `custom` object starting with nav_item_
+  // example:
+  // ```
+  //  { navItemMyaccount: { label: 'My Account', url: 'https://cxl.com/institute/my-account' } }
+  // ```
+  // That should parsed, with values serialized, into : `[{ label: 'My Account', url: 'https://cxl.com/institute/my-account' }]`
+  const customItems = useMemo(() => {
+    if (!custom) return [];
+
+    return Object.keys(custom)
+      .filter((key) => key.startsWith('navItem'))
+      .map((key) => {
+        const item = JSON.parse(custom[key] as string);
+        item.key = Math.random().toString();
+        return item;
+      });
+  }, [custom]);
+
+  const beforeItems = customItems.filter((item) => item.position === 'before');
+  const rightItems = customItems.filter((item) => item.position === 'right');
+  const afterItems = customItems.filter((item) => !['before', 'right'].includes(item.position));
+
   const metaDescription = description || t('default_description');
 
   const profileController = getModule(ProfileController, false);
@@ -167,6 +189,7 @@ const Layout = () => {
           canLogin={!!clientId}
           showPaymentsMenuItem={accessModel !== ACCESS_MODEL.AVOD}
           favoritesEnabled={favoritesEnabled}
+          rightSideItems={rightItems}
           profilesData={{
             currentProfile: profile,
             profiles,
@@ -175,17 +198,30 @@ const Layout = () => {
             isSelectingProfile: !!selectProfile.isLoading,
           }}
         >
-          <Button label={t('home')} to="/" variant="text" />
+          {beforeItems.map((item) => (
+            <Button key={item.key} label={item.label} to={item.url} variant="text" />
+          ))}
           {menu.map((item) => (
             <Button key={item.contentId} label={item.label} to={`/p/${item.contentId}`} variant="text" />
           ))}
+          {afterItems.map((item) => (
+            <Button key={item.key} label={item.label} to={item.url} variant="text" />
+          ))}
         </Header>
         <Sidebar isOpen={sideBarOpen} onClose={() => setSideBarOpen(false)}>
-          <MenuButton label={t('home')} to="/" tabIndex={sideBarOpen ? 0 : -1} />
+          {beforeItems.map((item) => (
+            <MenuButton key={item.key} label={item.label} to={item.url} tabIndex={sideBarOpen ? 0 : -1} />
+          ))}
           {menu.map((item) => (
             <MenuButton key={item.contentId} label={item.label} to={`/p/${item.contentId}`} tabIndex={sideBarOpen ? 0 : -1} />
           ))}
+          {afterItems.map((item) => (
+            <MenuButton key={item.key} label={item.label} to={item.url} tabIndex={sideBarOpen ? 0 : -1} />
+          ))}
           <hr className={styles.divider} />
+          {rightItems.map((item) => (
+            <MenuButton key={item.key} label={item.label} to={item.url} tabIndex={sideBarOpen ? 0 : -1} />
+          ))}
           {renderUserActions()}
         </Sidebar>
         <Outlet />
