@@ -109,16 +109,18 @@
 
 .buttonBar {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: flex-start;
+  gap: 12px;
   align-items: start;
   width: 100%;
+  max-width: 700px;
   margin: 0;
 
   > button, a {
     justify-content: center;
-    min-width: 200px;
-    margin: 6px 0;
+    min-width: 150px;
+    margin: 0;
     text-shadow: none;
   }
 
@@ -126,11 +128,14 @@
     flex-wrap: wrap;
     align-items: center;
 
-    > button {
+    > button, a {
       flex: 1;
       padding: 12px 0;
 
       &:first-child {
+        flex-basis: 100%;
+      }
+      &:nth-child(n+4) {
         flex-basis: 100%;
       }
     }
