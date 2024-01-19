@@ -201,6 +201,7 @@ const Layout = () => {
           {beforeItems.map((item) => (
             <Button key={item.key} label={item.label} to={item.url} variant="text" />
           ))}
+          <Button label={t('home')} to="/" variant="text" />
           {menu.map((item) => (
             <Button key={item.contentId} label={item.label} to={`/p/${item.contentId}`} variant="text" />
           ))}
@@ -212,6 +213,7 @@ const Layout = () => {
           {beforeItems.map((item) => (
             <MenuButton key={item.key} label={item.label} to={item.url} tabIndex={sideBarOpen ? 0 : -1} />
           ))}
+          <MenuButton label={t('home')} to="/" tabIndex={sideBarOpen ? 0 : -1} />
           {menu.map((item) => (
             <MenuButton key={item.contentId} label={item.label} to={`/p/${item.contentId}`} tabIndex={sideBarOpen ? 0 : -1} />
           ))}
