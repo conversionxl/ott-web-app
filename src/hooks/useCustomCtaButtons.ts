@@ -6,22 +6,26 @@ import type { CTAItem } from '#components/CTAButton/CTAButton';
 
 const useCustomCtaButtons = (itemData?: PlaylistItem) => {
   // Check and setup CTAs
-  const ctaExam: CTAItem | undefined = useMemo(() => (itemData?.cta_exam ? (JSON.parse(itemData.cta_exam as string) as CTAItem) : undefined), [itemData]);
-  const ctaSlides: CTAItem | undefined = useMemo(() => (itemData?.cta_slides ? (JSON.parse(itemData.cta_slides as string) as CTAItem) : undefined), [itemData]);
-  const ctaResource1: CTAItem | undefined = useMemo(
-    () => (itemData?.cta_resource1 ? (JSON.parse(itemData.cta_resource1 as string) as CTAItem) : undefined),
-    [itemData],
-  );
-  const ctaResource2: CTAItem | undefined = useMemo(
-    () => (itemData?.cta_resource2 ? (JSON.parse(itemData.cta_resource2 as string) as CTAItem) : undefined),
-    [itemData],
-  );
-  const ctaResource3: CTAItem | undefined = useMemo(
-    () => (itemData?.cta_resource3 ? (JSON.parse(itemData.cta_resource3 as string) as CTAItem) : undefined),
-    [itemData],
-  );
+  const customItems = useMemo(() => {
+    const allowedKeys = ['cta_exam', 'cta_slides', 'cta_resource1', 'cta_resource2', 'cta_resource3'];
+    return allowedKeys.map((key) => {
+      if (itemData && !itemData[key]) {
+        return undefined;
+      }
+      if (itemData && itemData[key] && typeof itemData[key] === 'string') {
+        try {
+          const data = JSON.parse(itemData[key] as string) as CTAItem;
+          return data;
+        } catch (error: unknown) {
+          console.error(`Failed to parse custom item ${key}`);
+          console.error(error);
+          return undefined;
+        }
+      }
+    });
+  }, [itemData]);
 
-  return [ctaExam, ctaSlides, ctaResource1, ctaResource2, ctaResource3];
+  return customItems;
 };
 
 export default useCustomCtaButtons;

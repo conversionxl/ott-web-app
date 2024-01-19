@@ -47,10 +47,17 @@ const Layout = () => {
     return Object.keys(custom)
       .filter((key) => key.startsWith('navItem'))
       .map((key) => {
-        const item = JSON.parse(custom[key] as string);
-        item.key = Math.random().toString();
-        return item;
-      });
+        try {
+          const item = JSON.parse(custom[key] as string);
+          item.key = Math.random().toString();
+          return item;
+        } catch (error: unknown) {
+          console.error('Failed to parse custom item', key, custom[key]);
+          console.error(error);
+          return undefined;
+        }
+      })
+      .filter((item) => !!item);
   }, [custom]);
 
   const beforeItems = customItems.filter((item) => item.position === 'before');
