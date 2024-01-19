@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import classNames from 'classnames';
 
 import styles from './VideoLayout.module.scss';
@@ -12,6 +12,8 @@ import useBreakpoint, { Breakpoint } from '#src/hooks/useBreakpoint';
 import { testId } from '#src/utils/common';
 import type { Playlist, PlaylistItem } from '#types/playlist';
 import type { AccessModel } from '#types/Config';
+import useCustomCtaButtons from '#src/hooks/useCustomCtaButtons';
+import CTAButton from '#components/CTAButton/CTAButton';
 
 type FilterProps = {
   filterMetadata?: React.ReactNode;
@@ -162,6 +164,17 @@ const VideoLayout: React.FC<Props> = ({
     );
   };
 
+  const customCTAs = useCustomCtaButtons(item);
+
+  // Check and setup CTAs
+  const extraButtons: React.ReactNode[] = useMemo(() => {
+    return customCTAs.map((cta, index) => {
+      if (!cta) return undefined;
+
+      return <CTAButton key={index + cta.label} label={cta.label} url={cta.url} />;
+    });
+  }, [customCTAs]);
+
   if (inlineLayout) {
     return (
       <div className={styles.videoInlineLayout} data-testid={testId('inline-layout')}>
@@ -174,6 +187,7 @@ const VideoLayout: React.FC<Props> = ({
             description={description}
             primaryMetadata={primaryMetadata}
             shareButton={shareButton}
+            extraButtons={extraButtons}
             favoriteButton={favoriteButton}
             trailerButton={trailerButton}
           />
@@ -192,6 +206,7 @@ const VideoLayout: React.FC<Props> = ({
       favoriteButton={favoriteButton}
       trailerButton={trailerButton}
       shareButton={shareButton}
+      extraButtons={extraButtons}
       primaryMetadata={primaryMetadata}
       secondaryMetadata={secondaryMetadata}
     >

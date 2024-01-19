@@ -1,3 +1,5 @@
+@use 'src/styles/variables';
+
 .shelf {
   margin: 0 0;
   color: var(--primary-color);
@@ -53,7 +55,7 @@
   width: 10px;
   height: 10px;
   margin: 0 5px;
-  background-color: rgba(254, 254, 254, 0.2);
+  background-color: variables.$gray;
   border-radius: 50%;
   transition: all 200ms ease;
 

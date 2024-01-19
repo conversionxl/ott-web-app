@@ -63,9 +63,6 @@ exports[`<VideoDetails> > renders and matches snapshot 1`] = `
             <button>
               favorite
             </button>
-            <button>
-              share
-            </button>
           </div>
         </div>
       </div>

@@ -10,13 +10,14 @@ type Props = {
   title: string | React.ReactNode;
   description: string;
   primaryMetadata: React.ReactNode;
-  shareButton: React.ReactNode;
   favoriteButton: React.ReactNode;
   trailerButton: React.ReactNode;
+  shareButton?: React.ReactNode;
+  extraButtons?: React.ReactNode[];
   live?: boolean;
 };
 
-const VideoDetailsInline: React.FC<Props> = ({ title, description, primaryMetadata, shareButton, favoriteButton, trailerButton }) => {
+const VideoDetailsInline: React.FC<Props> = ({ title, description, primaryMetadata, extraButtons = [], favoriteButton, trailerButton }) => {
   const breakpoint: Breakpoint = useBreakpoint();
   const isMobile = breakpoint === Breakpoint.xs;
 
@@ -29,7 +30,9 @@ const VideoDetailsInline: React.FC<Props> = ({ title, description, primaryMetada
         <div className={styles.primaryMetadata}>{primaryMetadata}</div>
         {trailerButton}
         {favoriteButton}
-        {shareButton}
+        {extraButtons.map((button, index) => (
+          <React.Fragment key={index}>{button}</React.Fragment>
+        ))}
       </div>
       <CollapsibleText text={description} className={styles.description} maxHeight={isMobile ? 60 : 'none'} />
     </div>

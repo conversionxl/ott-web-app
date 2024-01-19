@@ -15,9 +15,11 @@ type Props = {
   secondaryMetadata?: React.ReactNode;
   image?: string;
   startWatchingButton: React.ReactNode;
-  shareButton: React.ReactNode;
+  shareButton?: React.ReactNode;
   favoriteButton?: React.ReactNode;
   trailerButton?: React.ReactNode;
+  ctaButton?: React.ReactNode;
+  extraButtons?: React.ReactNode[];
   children: React.ReactNode;
 };
 
@@ -28,7 +30,7 @@ const VideoDetails: React.VFC<Props> = ({
   secondaryMetadata,
   image,
   startWatchingButton,
-  shareButton,
+  extraButtons = [],
   favoriteButton,
   trailerButton,
   children,
@@ -53,7 +55,9 @@ const VideoDetails: React.VFC<Props> = ({
               {startWatchingButton}
               {trailerButton}
               {favoriteButton}
-              {shareButton}
+              {extraButtons.map((button, index) => (
+                <React.Fragment key={index}>{button}</React.Fragment>
+              ))}
             </div>
           </div>
         </div>
