@@ -115,10 +115,11 @@
   width: 100%;
   margin: 0;
 
-  > button {
+  > button, a {
     justify-content: center;
     min-width: 200px;
     margin: 6px 0;
+    text-shadow: none;
   }
 
   @include responsive.mobile-and-tablet() {

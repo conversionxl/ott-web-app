@@ -19,6 +19,7 @@ type Props = {
   startIcon?: JSX.Element;
   variant?: Variant;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  onClickCapture?: MouseEventHandler<HTMLButtonElement>;
   tabIndex?: number;
   size?: 'small' | 'medium' | 'large';
   to?: string;
@@ -29,6 +30,7 @@ type Props = {
   busy?: boolean;
   id?: string;
   as?: 'button' | 'a';
+  target?: string;
 } & React.AriaAttributes;
 
 const Button: React.FC<Props> = ({
@@ -46,6 +48,7 @@ const Button: React.FC<Props> = ({
   to,
   as = 'button',
   onClick,
+  onClickCapture,
   className,
   ...rest
 }: Props) => {

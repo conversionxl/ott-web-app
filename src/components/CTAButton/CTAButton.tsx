@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 
 import useBreakpoint, { Breakpoint } from '#src/hooks/useBreakpoint';
 import Button from '#components/Button/Button';
@@ -17,11 +17,12 @@ export type CTAItem = {
 const CTAButton = ({ label, url }: Props) => {
   const breakpoint = useBreakpoint();
 
-  const onCtaClick = async () => {
-    window.location.assign(url);
+  const handleClick: MouseEventHandler = (e) => {
+    const btn = e.currentTarget as HTMLElement;
+    setTimeout(() => btn.blur(), 100);
   };
 
-  return <Button label={label} onClick={onCtaClick} fullWidth={breakpoint < Breakpoint.md} />;
+  return <Button label={label} to={url} fullWidth={breakpoint < Breakpoint.md} target="_blank" onClickCapture={handleClick} />;
 };
 
 export default CTAButton;
