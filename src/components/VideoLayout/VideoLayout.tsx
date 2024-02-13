@@ -164,7 +164,7 @@ const VideoLayout: React.FC<Props> = ({
     );
   };
 
-  const customCTAs = useCustomCtaButtons(item);
+  const customCTAs = useCustomCtaButtons(player);
 
   // Check and setup CTAs
   const extraButtons: React.ReactNode[] = useMemo(() => {
