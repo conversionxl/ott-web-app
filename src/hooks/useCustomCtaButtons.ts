@@ -1,10 +1,11 @@
 // React hook
 import { useMemo } from 'react';
 
-import type { PlaylistItem } from '#types/playlist';
 import type { CTAItem } from '#components/CTAButton/CTAButton';
 
-const useCustomCtaButtons = (itemData?: PlaylistItem) => {
+const useCustomCtaButtons = (player: any) => {
+  const itemData = player.props.seriesItem;
+
   // Check and setup CTAs
   const customItems = useMemo(() => {
     const allowedKeys = ['cta_exam', 'cta_slides', 'cta_resource1', 'cta_resource2', 'cta_resource3'];
