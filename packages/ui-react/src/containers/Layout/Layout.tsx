@@ -39,7 +39,24 @@ const Layout = () => {
   );
   const isLoggedIn = !!useAccountStore(({ user }) => user);
   const favoritesEnabled = !!config.features?.favoritesList;
-  const { menu, assets, siteName, description, features, styling } = config;
+  const { menu, assets, siteName, description, features, styling, custom } = config;
+
+  const customItems = useMemo(() => {
+    if (!custom) return [];
+
+    return Object.keys(custom)
+      .filter((key) => key.startsWith('navItem'))
+      .map((key) => {
+        const item = JSON.parse(custom[key] as string);
+        item.key = Math.random().toString();
+        return item;
+      });
+  }, [custom]);
+
+  const beforeItems = customItems.filter((item) => item.position === 'before');
+  const rightItems = customItems.filter((item) => item.position === 'right');
+  const afterItems = customItems.filter((item) => !['before', 'right'].includes(item.position));
+
   const metaDescription = description || t('default_description');
   const { footerText: configFooterText } = styling || {};
   const footerText = configFooterText || unicodeToChar(env.APP_FOOTER_TEXT);
@@ -190,10 +207,17 @@ const Layout = () => {
             selectProfile: ({ avatarUrl, id }) => selectProfile.mutate({ id, avatarUrl }),
             isSelectingProfile: selectProfile.isLoading,
           }}
+          rightSideItems={rightItems}
         >
           <Button activeClassname={styles.headerButton} label={t('home')} to="/" variant="text" />
+          {beforeItems.map((item) => (
+            <Button key={item.key} label={item.label} to={item.url} variant="text" />
+          ))}
           {menu.map((item) => (
             <Button activeClassname={styles.headerButton} key={item.contentId} label={item.label} to={playlistURL(item.contentId)} variant="text" />
+          ))}
+          {afterItems.map((item) => (
+            <Button key={item.key} label={item.label} to={item.url} variant="text" />
           ))}
         </Header>
         <main id="content" className={styles.main} tabIndex={-1}>
@@ -211,10 +235,19 @@ const Layout = () => {
       </div>
       <Sidebar isOpen={sideBarOpen} onClose={() => setSideBarOpen(false)}>
         <MenuButton label={t('home')} to="/" tabIndex={sideBarOpen ? 0 : -1} />
+        {beforeItems.map((item) => (
+          <MenuButton key={item.key} label={item.label} to={item.url} tabIndex={sideBarOpen ? 0 : -1} />
+        ))}
         {menu.map((item) => (
           <MenuButton key={item.contentId} label={item.label} to={playlistURL(item.contentId)} tabIndex={sideBarOpen ? 0 : -1} />
         ))}
+        {afterItems.map((item) => (
+          <Button key={item.key} label={item.label} to={item.url} variant="text" />
+        ))}
         <hr className={styles.divider} />
+        {rightItems.map((item) => (
+          <MenuButton key={item.key} label={item.label} to={item.url} tabIndex={sideBarOpen ? 0 : -1} />
+        ))}
         {renderUserActions(sideBarOpen)}
       </Sidebar>
     </div>
