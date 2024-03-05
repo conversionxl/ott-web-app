@@ -66,6 +66,15 @@ type Props = {
     selectProfile: ({ avatarUrl, id }: { avatarUrl: string; id: string }) => void;
     isSelectingProfile: boolean;
   };
+
+  rightSideItems?: CustomMenuItem[];
+};
+
+type CustomMenuItem = {
+  label: string;
+  url: string;
+  position?: 'before' | 'right' | 'after';
+  key: string;
 };
 
 const Header: React.FC<Props> = ({
@@ -97,6 +106,7 @@ const Header: React.FC<Props> = ({
   siteName,
   profilesData: { currentProfile, profiles, profilesEnabled, selectProfile, isSelectingProfile } = {},
   navItems = [],
+  rightSideItems,
 }) => {
   const { t } = useTranslation('menu');
   const [logoLoaded, setLogoLoaded] = useState(false);
@@ -236,6 +246,11 @@ const Header: React.FC<Props> = ({
           </div>
         )}
         <nav className={styles.nav}>{logoLoaded || !logoSrc ? renderNav() : null}</nav>
+        <div className={styles.customActions}>
+          {rightSideItems?.map((item) => (
+            <Button key={item.key} label={item.label} to={item.url} variant="text" />
+          ))}
+        </div>
         <div className={styles.actions}>
           {renderSearch()}
           {renderLanguageDropdown()}
