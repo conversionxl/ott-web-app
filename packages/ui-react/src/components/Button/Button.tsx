@@ -30,6 +30,7 @@ type Props = {
   id?: string;
   as?: 'button' | 'a';
   activeClassname?: string;
+  target?: string;
 } & React.AriaAttributes;
 
 const Button: React.FC<Props> = ({
