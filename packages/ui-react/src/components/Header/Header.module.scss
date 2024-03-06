@@ -255,3 +255,10 @@
     width: 80px;
   }
 }
+
+// Custom
+@include responsive.mobile-only() {
+  .customActions {
+    display: none;
+  }
+}

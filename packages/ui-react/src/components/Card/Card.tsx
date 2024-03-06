@@ -50,7 +50,7 @@ function Card({
   url,
   tabIndex = 0,
 }: CardProps): JSX.Element {
-  const { title, duration, episodeNumber, seasonNumber, cardImage: image, mediaStatus, scheduledStart } = item;
+  const { title, duration, episodeNumber, seasonNumber, cardImage: image, mediaStatus, scheduledStart, series_label } = item;
   const {
     t,
     i18n: { language },
@@ -78,7 +78,7 @@ function Card({
     if (loading || disabled || !title) return null;
 
     if (isSeriesItem) {
-      return <div className={styles.tag}>{t('video:series')}</div>;
+      return <div className={styles.tag}>{(series_label as string) || t('video:series')}</div>;
     } else if (episodeNumber) {
       return <div className={styles.tag}>{formatSeriesMetaString(seasonNumber, episodeNumber)}</div>;
     } else if (duration) {

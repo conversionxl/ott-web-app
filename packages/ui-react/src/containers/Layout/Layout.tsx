@@ -241,7 +241,7 @@ const Layout = () => {
             </li>
           ))}
         {afterItems.map((item) => (
-          <Button key={item.key} label={item.label} to={item.url} variant="text" />
+          <MenuButton key={item.key} label={item.label} to={item.url} tabIndex={sideBarOpen ? 0 : -1} />
         ))}
         </ul>
         {rightItems.map((item) => (
