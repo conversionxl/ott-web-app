@@ -127,12 +127,19 @@ APP_OAUTH_DASHBOARD_URL=a valid url where to redirect for the back to account ct
 APP_OAUTH_UNLOCK_ONLY_PREMIUM=`false` if you want to unlock content for non-premium users or else `true` [OPTIONAL]
 ```
 
-#### 10. Install the dependencies from the root using the below commands
+#### 10. Add the following Custom Parameters in the JWP dashboard for specific Apps
+```bash
+appContentSearch = yes (if you need search bar)
+isOAuthMode = yes
+urlSigning = yes
+```
+
+#### 11. Install the dependencies from the root using the below commands
 ```bash
 yarn install
 ```
-#### 11. Build the project from the root using the below command
+#### 12. Build the project from the root using the below command
 ```bash
 yarn web build
 ```
-#### 12. Host the build folder from  the `platforms/web/build` in the server
+#### 13. Host the build folder from  the `platforms/web/build` in the server
