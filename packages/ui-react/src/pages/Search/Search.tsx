@@ -34,7 +34,7 @@ const Search = () => {
 
   // User
   const { user, subscription } = useAccountStore(({ user, subscription }) => ({ user, subscription }), shallow);
-  const isLoggedIn = !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user.isPremium : true);
+  const isLoggedIn = !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user?.isPremium : true);
 
   const getURL = (playlistItem: PlaylistItem) =>
     mediaURL({

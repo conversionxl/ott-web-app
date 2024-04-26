@@ -49,7 +49,7 @@ const MediaMovie: ScreenComponent<PlaylistItem> = ({ data, isLoading }) => {
   const { isEntitled, mediaOffers } = useEntitlement(data);
   const hasMediaOffers = !!mediaOffers.length;
 
-  const isLoggedIn = !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user.isPremium : true);
+  const isLoggedIn = !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user?.isPremium : true);
   const hasSubscription = !!subscription;
 
   // Config

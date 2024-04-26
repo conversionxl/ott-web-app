@@ -52,7 +52,7 @@ const MediaEvent: ScreenComponent<PlaylistItem> = ({ data: media, isLoading }) =
   const { isEntitled, mediaOffers } = useEntitlement(media);
   const hasMediaOffers = !!mediaOffers.length;
 
-  const isLoggedIn = !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user.isPremium : true);
+  const isLoggedIn = !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user?.isPremium : true);
   const hasSubscription = !!subscription;
 
   // Config

@@ -24,7 +24,7 @@ const getOAuthConfig = (env: Env): TAuthConfig => {
     },
     redirectUri: (env.APP_OAUTH_REDIRECT_URL || undefined) as string,
     // eslint-disable-next-line no-alert
-    onRefreshTokenExpire: (event: TRefreshTokenExpiredEvent) => window.confirm('Session expired. Refresh page to continue using the site?') && event.login(),
+    onRefreshTokenExpire: (event: TRefreshTokenExpiredEvent) => window.confirm('Session expired. Refresh page to continue using the site.') && event.login(),
   };
 };
 

@@ -25,7 +25,7 @@ const PlaylistGrid: ScreenComponent<Playlist> = ({ data, isLoading }) => {
 
   // User
   const { user, subscription } = useAccountStore(({ user, subscription }) => ({ user, subscription }), shallow);
-  const isLoggedIn = !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user.isPremium : true);
+  const isLoggedIn = !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user?.isPremium : true);
 
   useEffect(() => {
     // reset filter when the playlist id changes

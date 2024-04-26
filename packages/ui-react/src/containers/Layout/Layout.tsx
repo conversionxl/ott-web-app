@@ -158,6 +158,7 @@ const Layout = () => {
         </section>
       );
     }
+
     return isLoggedIn ? (
       <section aria-labelledby={userMenuTitleId}>
         <UserMenu focusable={sideBarOpen} favoritesEnabled={favoritesEnabled} titleId={userMenuTitleId} showPaymentsItem />

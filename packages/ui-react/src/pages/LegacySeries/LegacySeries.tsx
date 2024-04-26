@@ -71,7 +71,7 @@ const LegacySeries = () => {
   const { user, subscription } = useAccountStore(({ user, subscription }) => ({ user, subscription }), shallow);
   const { isEntitled, mediaOffers } = useEntitlement(episode || firstEpisode);
   const hasMediaOffers = !!mediaOffers.length;
-  const isLoggedIn = !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user.isPremium : true);
+  const isLoggedIn = !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user?.isPremium : true);
   const hasSubscription = !!subscription;
 
   // Config
