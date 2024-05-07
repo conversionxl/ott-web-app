@@ -154,7 +154,7 @@ const Header: React.FC<Props> = ({
 
     // FEAT:: back to main account cta if oauth mode
     if (isLoggedIn && isOAuthMode) {
-      return <OAuthBackToAccountButton targetUrl={env.APP_OAUTH_DASHBOARD_URL as string} />;
+      return <OAuthBackToAccountButton targetUrl={env.APP_OAUTH_DASHBOARD_URL as string} className={styles.backToAccountButton} />;
     }
 
     return isLoggedIn ? (

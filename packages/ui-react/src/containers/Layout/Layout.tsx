@@ -171,7 +171,7 @@ const Layout = () => {
     if (isLoggedIn && isOAuthMode) {
       return (
         <section aria-labelledby={userMenuTitleId} className={styles.buttonContainer}>
-          <OAuthBackToAccountButton targetUrl={env.APP_OAUTH_DASHBOARD_URL as string} />
+          <OAuthBackToAccountButton targetUrl={env.APP_OAUTH_DASHBOARD_URL as string} className={styles.backToAccount} />
         </section>
       );
     }

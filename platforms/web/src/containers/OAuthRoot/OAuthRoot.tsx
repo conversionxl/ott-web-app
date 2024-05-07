@@ -1,5 +1,4 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { type FC, type ReactNode, useEffect } from 'react';
 import { useConfigStore } from '@jwp/ott-common/src/stores/ConfigStore';
 import { shallow } from '@jwp/ott-common/src/utils/compare';
 import { isTruthyCustomParamValue } from '@jwp/ott-common/src/utils/common';
@@ -9,29 +8,39 @@ import { AuthProvider, getOAuthConfig, getOAuthUserResource, useOAuth } from '@j
 import env from '@jwp/ott-common/src/env';
 
 type OAuthProviderProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
-const OAuthProvider: React.FC<OAuthProviderProps> = ({ children }) => {
-  const { pathname } = useLocation();
+const OAuthProvider: FC<OAuthProviderProps> = ({ children }) => {
   const { token } = useOAuth();
-  React.useEffect(() => {
+
+  useEffect(() => {
     useConfigStore.setState({
       accessModel: ACCESS_MODEL.AUTHVOD,
     });
     (async () => {
+      useAccountStore.setState({
+        user: token
+          ? {
+              id: token,
+              email: '',
+              metadata: {},
+            }
+          : null,
+        loading: true,
+      });
       const user = token ? await getOAuthUserResource(`Bearer ${token}`) : null;
       useAccountStore.setState({
         user,
         loading: false,
       });
     })();
-  }, [token, pathname]);
+  }, [token]);
 
   return children;
 };
 
-const OAuthRoot: React.FC<OAuthProviderProps> = ({ children }) => {
+const OAuthRoot: FC<OAuthProviderProps> = ({ children }) => {
   const { isOAuthMode } = useConfigStore(({ config }) => ({ isOAuthMode: isTruthyCustomParamValue(config.custom?.isOAuthMode) }), shallow);
 
   if (isOAuthMode) {
