@@ -50,6 +50,7 @@ const getOAuthUserResource = async (authorization?: string): Promise<null | Cust
           lastName: parsedResponse?.display_name,
           email: parsedResponse?.user_email as string,
           isPremium: parsedResponse?.is_premium,
+          isOAuthMode: true,
           country: 'UK',
           metadata: {},
         };

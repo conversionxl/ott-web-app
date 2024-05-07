@@ -15,15 +15,16 @@ const OAuthProvider: FC<OAuthProviderProps> = ({ children }) => {
   const { token } = useOAuth();
 
   useEffect(() => {
-    useConfigStore.setState({
-      accessModel: ACCESS_MODEL.AUTHVOD,
-    });
     (async () => {
+      useConfigStore.setState({
+        accessModel: ACCESS_MODEL.AUTHVOD,
+      });
       useAccountStore.setState({
         user: token
           ? {
               id: token,
               email: '',
+              isOAuthMode: true,
               metadata: {},
             }
           : null,
