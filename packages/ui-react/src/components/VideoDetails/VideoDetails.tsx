@@ -19,6 +19,8 @@ type Props = {
   favoriteButton?: React.ReactNode;
   trailerButton?: React.ReactNode;
   children: React.ReactNode;
+  ctaButton?: React.ReactNode;
+  extraButtons?: React.ReactNode[];
 };
 
 const VideoDetails: React.VFC<Props> = ({
@@ -32,6 +34,7 @@ const VideoDetails: React.VFC<Props> = ({
   favoriteButton,
   trailerButton,
   children,
+  extraButtons = [],
 }) => {
   const breakpoint: Breakpoint = useBreakpoint();
   const isMobile = breakpoint === Breakpoint.xs;
@@ -56,6 +59,9 @@ const VideoDetails: React.VFC<Props> = ({
               {trailerButton}
               {favoriteButton}
               {shareButton}
+              {extraButtons.map((button, index) => (
+                <React.Fragment key={index}>{button}</React.Fragment>
+              ))}
             </div>
           </div>
         </div>

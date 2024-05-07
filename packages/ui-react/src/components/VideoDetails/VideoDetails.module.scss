@@ -182,3 +182,15 @@
   border: 3px solid white;
   border-radius: 100%;
 }
+
+// Custom
+
+/* stylelint-disable no-duplicate-selectors */
+
+.buttonBar {
+  flex-wrap: wrap;
+
+  > a {
+    margin: 6px;
+  }
+}

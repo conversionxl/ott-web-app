@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import type { Playlist, PlaylistItem } from '@jwp/ott-common/types/playlist';
 import type { AccessModel } from '@jwp/ott-common/types/config';
@@ -10,6 +10,8 @@ import Filter from '../Filter/Filter';
 import VideoDetails from '../VideoDetails/VideoDetails';
 import VideoDetailsInline from '../VideoDetailsInline/VideoDetailsInline';
 import VideoList from '../VideoList/VideoList';
+import useCustomCtaButtons from '../../hooks/useCustomCTAButtons';
+import CTAButton from '../CTAButton/CTAButton';
 
 import styles from './VideoLayout.module.scss';
 
@@ -161,6 +163,17 @@ const VideoLayout: React.FC<Props> = ({
     );
   };
 
+  const customCTAs = useCustomCtaButtons(player);
+
+  // Check and setup CTAs
+  const extraButtons: React.ReactNode[] = useMemo(() => {
+    return customCTAs.map((cta, index) => {
+      if (!cta) return undefined;
+
+      return <CTAButton key={index + cta.label} label={cta.label} url={cta.url} />;
+    });
+  }, [customCTAs]);
+
   if (inlineLayout) {
     return (
       <div className={styles.videoInlineLayout} data-testid={testId('inline-layout')}>
@@ -174,6 +187,7 @@ const VideoLayout: React.FC<Props> = ({
             shareButton={shareButton}
             favoriteButton={favoriteButton}
             trailerButton={trailerButton}
+            extraButtons={extraButtons}
           />
         </div>
         {renderRelatedVideos(isTablet)}
@@ -193,6 +207,7 @@ const VideoLayout: React.FC<Props> = ({
       shareButton={shareButton}
       primaryMetadata={primaryMetadata}
       secondaryMetadata={secondaryMetadata}
+      extraButtons={extraButtons}
     >
       {playlist && <div className={styles.relatedVideos}>{renderRelatedVideos(true)}</div>}
       {children}
