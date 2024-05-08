@@ -129,7 +129,6 @@ APP_OAUTH_UNLOCK_ONLY_PREMIUM=`false` if you want to unlock content for non-prem
 
 #### 10. Add the following Custom Parameters in the JWP dashboard for specific Apps
 ```bash
-appContentSearch = yes (if you need search bar)
 isOAuthMode = yes
 urlSigning = yes
 ```
