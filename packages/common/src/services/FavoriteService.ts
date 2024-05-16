@@ -54,7 +54,10 @@ export default class FavoriteService {
   }
 
   getFavorites = async (user: Customer | null, favoritesList: string) => {
-    const savedItems = user ? await this.getFavoritesFromAccount(user) : await this.getFavoritesFromStorage();
+    // FEAT:: show favorites list from local storage
+    const fromLocalStorage = !user || user?.isOAuthMode;
+
+    const savedItems = !fromLocalStorage ? await this.getFavoritesFromAccount(user) : await this.getFavoritesFromStorage();
     const mediaIds = savedItems.map(({ mediaid }) => mediaid);
 
     if (!mediaIds) {
@@ -77,7 +80,9 @@ export default class FavoriteService {
   };
 
   persistFavorites = async (favorites: Favorite[], user: Customer | null) => {
-    if (user) {
+    // FEAT:: show favorites list from local storage
+    const fromLocalStorage = !user || user?.isOAuthMode;
+    if (!fromLocalStorage) {
       return this.accountService?.updateFavorites({
         favorites: this.serializeFavorites(favorites),
         user,

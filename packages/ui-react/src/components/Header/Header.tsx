@@ -8,6 +8,7 @@ import SearchIcon from '@jwp/ott-theme/assets/icons/search.svg?react';
 import CloseIcon from '@jwp/ott-theme/assets/icons/close.svg?react';
 import AccountCircle from '@jwp/ott-theme/assets/icons/account_circle.svg?react';
 import type { Profile } from '@jwp/ott-common/types/profiles';
+import env from '@jwp/ott-common/src/env';
 
 import SearchBar, { type Props as SearchBarProps } from '../SearchBar/SearchBar';
 import Logo from '../Logo/Logo';
@@ -20,6 +21,7 @@ import Panel from '../Panel/Panel';
 import Icon from '../Icon/Icon';
 import ProfileCircle from '../ProfileCircle/ProfileCircle';
 import Popover from '../Popover/Popover';
+import OAuthBackToAccountButton from '../OAuthBackToAccountButton/OAuthBackToAccountButton';
 
 import styles from './Header.module.scss';
 
@@ -66,7 +68,7 @@ type Props = {
     selectProfile: ({ avatarUrl, id }: { avatarUrl: string; id: string }) => void;
     isSelectingProfile: boolean;
   };
-
+  isOAuthMode?: boolean;
   rightSideItems?: CustomMenuItem[];
 };
 
@@ -106,6 +108,7 @@ const Header: React.FC<Props> = ({
   siteName,
   profilesData: { currentProfile, profiles, profilesEnabled, selectProfile, isSelectingProfile } = {},
   navItems = [],
+  isOAuthMode,
   rightSideItems,
 }) => {
   const { t } = useTranslation('menu');
@@ -116,7 +119,10 @@ const Header: React.FC<Props> = ({
   });
 
   // only show the language dropdown when there are other languages to choose from
-  const showLanguageSwitcher = supportedLanguages.length > 1;
+  let showLanguageSwitcher = supportedLanguages.length > 1;
+
+  // FEAT:: no language switcher in oauth mode
+  showLanguageSwitcher = !isOAuthMode;
 
   const renderSearch = () => {
     if (!searchEnabled) return null;
@@ -145,6 +151,11 @@ const Header: React.FC<Props> = ({
 
   const renderUserActions = () => {
     if (!canLogin || breakpoint <= Breakpoint.sm) return null;
+
+    // FEAT:: back to main account cta if oauth mode
+    if (isLoggedIn && isOAuthMode) {
+      return <OAuthBackToAccountButton targetUrl={env.APP_OAUTH_DASHBOARD_URL as string} className={styles.backToAccountButton} />;
+    }
 
     return isLoggedIn ? (
       <React.Fragment>

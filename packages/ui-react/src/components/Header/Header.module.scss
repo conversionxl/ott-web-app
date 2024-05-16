@@ -138,6 +138,10 @@
   }
 }
 
+.backToAccountButton {
+  margin-left: #{variables.$base-spacing};
+}
+
 .actionButton {
   margin-left: calc(#{variables.$base-spacing} / 2);
 }

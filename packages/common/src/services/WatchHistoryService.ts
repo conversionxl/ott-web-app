@@ -83,7 +83,10 @@ export default class WatchHistoryService {
   }
 
   getWatchHistory = async (user: Customer | null, continueWatchingList: string) => {
-    const savedItems = user ? await this.getWatchHistoryFromAccount(user) : await this.getWatchHistoryFromStorage();
+    // FEAT:: show favorites list from local storage
+    const fromLocalStorage = !user || user?.isOAuthMode;
+
+    const savedItems = !fromLocalStorage ? await this.getWatchHistoryFromAccount(user) : await this.getWatchHistoryFromStorage();
 
     // When item is an episode of the new flow -> show the card as a series one, but keep episode to redirect in a right way
     const ids = savedItems.map(({ mediaid }) => mediaid);
@@ -120,7 +123,9 @@ export default class WatchHistoryService {
     }));
 
   persistWatchHistory = async (watchHistory: WatchHistoryItem[], user: Customer | null) => {
-    if (user) {
+    // FEAT:: show favorites list from local storage
+    const fromLocalStorage = !user || user?.isOAuthMode;
+    if (!fromLocalStorage) {
       await this.accountService?.updateWatchHistory({
         history: this.serializeWatchHistory(watchHistory),
         user,

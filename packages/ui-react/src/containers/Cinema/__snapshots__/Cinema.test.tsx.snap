@@ -74,16 +74,16 @@ exports[`<Cinema> > renders and matches snapshot 1`] = `
               </div>
             </div>
             <div
-              class="_loadingOverlay_eb61cb _inline_eb61cb"
+              class="_error_41dece"
             >
-              <div
-                class="_buffer_d122df"
+              <h2
+                class="_title_41dece"
               >
-                <div />
-                <div />
-                <div />
-                <div />
-              </div>
+                player_error.user_blocked_title
+              </h2>
+              <p>
+                player_error.user_blocked_description
+              </p>
             </div>
           </div>
         </div>

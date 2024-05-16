@@ -9,6 +9,9 @@ import { isScheduledOrLiveMedia } from '@jwp/ott-common/src/utils/liveEvent';
 import type { Content } from '@jwp/ott-common/types/config';
 import type { Playlist } from '@jwp/ott-common/types/playlist';
 import { useQueries, useQueryClient } from 'react-query';
+import { useConfigStore } from '@jwp/ott-common/src/stores/ConfigStore';
+import { shallow } from '@jwp/ott-common/src/utils/compare';
+import { useAccountStore } from '@jwp/ott-common/src/stores/AccountStore';
 
 const placeholderData = generatePlaylistPlaceholder(30);
 
@@ -23,6 +26,10 @@ const usePlaylists = (content: Content[], rowsToLoad: number | undefined = undef
   const page_limit = PLAYLIST_LIMIT.toString();
   const queryClient = useQueryClient();
   const apiService = getModule(ApiService);
+
+  // FEAT:: no favorites for OAuth users until sign in
+  const { isOAuthMode } = useConfigStore(({ config }) => ({ isOAuthMode: isTruthyCustomParamValue(config.custom?.isOAuthMode) }), shallow);
+  const { user } = useAccountStore.getState();
 
   const favorites = useFavoritesStore((state) => state.getPlaylist());
   const watchHistory = useWatchHistoryStore((state) => state.getPlaylist());
@@ -54,8 +61,16 @@ const usePlaylists = (content: Content[], rowsToLoad: number | undefined = undef
   );
 
   const result: UsePlaylistResult = content.map(({ type }, index) => {
-    if (type === PersonalShelf.Favorites) return { data: favorites, isLoading: false, isSuccess: true };
-    if (type === PersonalShelf.ContinueWatching) return { data: watchHistory, isLoading: false, isSuccess: true };
+    if (type === PersonalShelf.Favorites) {
+      // FEAT:: no favorites for OAuth users until sign in
+      if (isOAuthMode && !user) return { data: undefined, isLoading: false, isSuccess: false };
+      return { data: favorites, isLoading: false, isSuccess: true };
+    }
+    if (type === PersonalShelf.ContinueWatching) {
+      // FEAT:: no continue watching for OAuth users until sign in
+      if (isOAuthMode && !user) return { data: undefined, isLoading: false, isSuccess: false };
+      return { data: watchHistory, isLoading: false, isSuccess: true };
+    }
 
     const { data, isLoading, isSuccess, error } = playlistQueries[index];
 
