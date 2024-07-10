@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
-import type { ProfilesData } from '@inplayer-org/inplayer.js';
 import * as yup from 'yup';
+import type { ProfilesData } from '@jwp/ott-common/types/profiles';
 
 import ProfileService from '../services/integrations/ProfileService';
 import type { IntegrationType } from '../../types/config';
