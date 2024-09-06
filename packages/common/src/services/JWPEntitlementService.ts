@@ -5,7 +5,7 @@ import JWPAPIService from './integrations/jwp/JWPAPIService';
 
 @injectable()
 export default class JWPEntitlementService {
-  private readonly apiService;
+  protected readonly apiService;
 
   constructor(@inject(JWPAPIService) apiService: JWPAPIService) {
     this.apiService = apiService;
@@ -14,7 +14,7 @@ export default class JWPEntitlementService {
   getJWPMediaToken = async (configId: string = '', mediaId: string) => {
     try {
       const data = await this.apiService.get<SignedMediaResponse>(
-        'v2/items/jw-media/token',
+        '/v2/items/jw-media/token',
         {
           withAuthentication: true,
         },
