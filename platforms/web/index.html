@@ -28,6 +28,15 @@
 
   <!-- Manifest -->
   <link rel="manifest" href="/manifest.json" />
+
+  <script>
+    if(location.pathname === '/cxl-sso'){
+      const params = new URLSearchParams(location.search);
+      params.delete('app-config');
+
+      location.replace(`https://cxl.com/institute/oauth/authorize/?${params}`);
+    }
+  </script>
 </head>
 <body>
   <div id="root"></div>
