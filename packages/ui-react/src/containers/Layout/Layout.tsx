@@ -41,6 +41,7 @@ const Layout = () => {
   );
   const userMenuTitleId = useOpaqueId('usermenu-title');
   const isLoggedIn = !!useAccountStore(({ user }) => user);
+  const isPremium = !!useAccountStore(({ user }) => user)?.isPremium;
   const favoritesEnabled = !!config.features?.favoritesList;
   const { menu, assets, siteName, description, features, styling, custom } = config;
 
@@ -228,6 +229,7 @@ const Layout = () => {
           supportedLanguages={supportedLanguages}
           currentLanguage={currentLanguage}
           isLoggedIn={isLoggedIn}
+          isPremium={isPremium}
           sideBarOpen={sideBarOpen}
           userMenuOpen={userMenuOpen}
           languageMenuOpen={languageMenuOpen}

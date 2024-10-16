@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { PlaylistItem } from '@jwp/ott-common/types/playlist';
 import ApiService from '@jwp/ott-common/src/services/ApiService';
 import { getModule } from '@jwp/ott-common/src/modules/container';
+import env from '@jwp/ott-common/src/env';
 
 import useContentProtection from './useContentProtection';
 
@@ -15,7 +16,7 @@ export default function useProtectedMedia(item: PlaylistItem) {
   useEffect(() => {
     const m3u8 = contentProtectionQuery.data?.sources.find((source) => source.file.indexOf('.m3u8') !== -1);
     if (!m3u8) {
-      setIsUserBlocked(!contentProtectionQuery?.user?.isPremium);
+      setIsUserBlocked(env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !contentProtectionQuery?.user?.isPremium : false);
       return;
     }
     fetch(m3u8.file, { method: 'HEAD' }).then((response) => {

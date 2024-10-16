@@ -9,6 +9,7 @@ import AccountController from '@jwp/ott-common/src/controllers/AccountController
 import { useConfigStore } from '@jwp/ott-common/src/stores/ConfigStore';
 import { isTruthyCustomParamValue } from '@jwp/ott-common/src/utils/common';
 import { useAccountStore } from '@jwp/ott-common/src/stores/AccountStore';
+import env from '@jwp/ott-common/src/env';
 
 import { generateJwtSignedContentToken, useOAuth } from './useOAuth';
 
@@ -57,11 +58,15 @@ const useContentProtection = <T>(
       // if self-signed is enabled in jwp dashboard
       // and
       // isOAuthMode is enabled and user is logged in and in premium mode
-      if (!!id && signingEnabled && isOAuthMode && !!user && !!user?.isPremium) {
+      if (!!id && signingEnabled && isOAuthMode && !!user && (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user?.isPremium : true)) {
         return generateJwtSignedContentToken(id, `Bearer ${bearerToken}`);
       }
     },
-    { enabled: signingEnabled && enabled && !!id && (isOAuthMode ? !!user?.isPremium : false), keepPreviousData: false, staleTime: 15 * 60 * 1000 },
+    {
+      enabled: signingEnabled && enabled && !!id && (isOAuthMode ? (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user?.isPremium : true) : false),
+      keepPreviousData: false,
+      staleTime: 15 * 60 * 1000,
+    },
   );
 
   const queryResult = useQuery<T | undefined>([type, id, params, token], async () => callback(token, drmPolicyId), {

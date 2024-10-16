@@ -15,6 +15,7 @@ import Home from '@jwp/ott-ui-react/src/pages/Home/Home';
 import Search from '@jwp/ott-ui-react/src/pages/Search/Search';
 import User from '@jwp/ott-ui-react/src/pages/User/User';
 import LegacySeries from '@jwp/ott-ui-react/src/pages/LegacySeries/LegacySeries';
+import RedirectToSSO from '@jwp/ott-ui-react/src/pages/RedirectToExternal/RedirectToSSO';
 import MediaScreenRouter from '@jwp/ott-ui-react/src/pages/ScreenRouting/MediaScreenRouter';
 import PlaylistScreenRouter from '@jwp/ott-ui-react/src/pages/ScreenRouting/PlaylistScreenRouter';
 import Layout from '@jwp/ott-ui-react/src/containers/Layout/Layout';
@@ -92,6 +93,7 @@ export default function AppRoutes() {
           element={<ErrorPage title={t('notfound_error_heading', 'Not found')} message={t('notfound_error_description', "This page doesn't exist.")} />}
         />
       </Route>
+      <Route path="/cxl-sso" element={<RedirectToSSO />} />
     </Routes>
   );
 }
