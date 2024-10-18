@@ -49,6 +49,7 @@ type Props = {
   closeLanguageMenu: () => void;
   children?: ReactNode;
   isLoggedIn: boolean;
+  isPremium: boolean;
   sideBarOpen: boolean;
   userMenuOpen: boolean;
   languageMenuOpen: boolean;
@@ -92,6 +93,7 @@ const Header: React.FC<Props> = ({
   onCloseSearchButtonClick,
   onSignUpButtonClick,
   isLoggedIn,
+  isPremium,
   sideBarOpen,
   userMenuOpen,
   languageMenuOpen,
@@ -154,7 +156,7 @@ const Header: React.FC<Props> = ({
 
     // FEAT:: back to main account cta if oauth mode
     if (isLoggedIn && isOAuthMode) {
-      return <OAuthBackToAccountButton targetUrl={env.APP_OAUTH_DASHBOARD_URL as string} className={styles.backToAccountButton} />;
+      return isPremium ? <OAuthBackToAccountButton targetUrl={env.APP_OAUTH_DASHBOARD_URL as string} className={styles.backToAccountButton} /> : null;
     }
 
     return isLoggedIn ? (
