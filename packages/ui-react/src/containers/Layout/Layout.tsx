@@ -250,6 +250,8 @@ const Layout = () => {
           }}
           navItems={navItems}
           isOAuthMode={isOAuthMode}
+          beforeItems={beforeItems}
+          afterItems={afterItems}
         >
           <Button activeClassname={styles.headerButton} label={t('home')} to="/" variant="text" />
           {menu.map((item) => (
