@@ -61,6 +61,8 @@ type Props = {
   favoritesEnabled?: boolean;
   siteName?: string;
   navItems?: NavItem[];
+  beforeItems?: CustomMenuItem[];
+  afterItems?: CustomMenuItem[];
 
   profilesData?: {
     currentProfile: Profile | null;
@@ -112,6 +114,8 @@ const Header: React.FC<Props> = ({
   navItems = [],
   isOAuthMode,
   rightSideItems,
+  beforeItems = [],
+  afterItems = [],
 }) => {
   const { t } = useTranslation('menu');
   const [logoLoaded, setLogoLoaded] = useState(false);
@@ -231,13 +235,26 @@ const Header: React.FC<Props> = ({
     if (navItems.length === 0) {
       return children;
     }
+
     return (
       <ul>
+        {beforeItems.length > 0 &&
+          beforeItems.map((item, index) => (
+            <li key={index}>
+              <Button activeClassname={styles.navButton} label={item.label} to={item.url} variant="text" />
+            </li>
+          ))}
         {navItems.map((item, index) => (
           <li key={index}>
             <Button activeClassname={styles.navButton} label={item.label} to={item.to} variant="text" />
           </li>
         ))}
+        {afterItems.length > 0 &&
+          afterItems.map((item, index) => (
+            <li key={index}>
+              <Button activeClassname={styles.navButton} label={item.label} to={item.url} variant="text" />
+            </li>
+          ))}
       </ul>
     );
   };

@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import type { CTAItem } from '../components/CTAButton/CTAButton';
 
 const useCustomCtaButtons = (player: any) => {
-  const itemData = player.props.seriesItem;
+  const itemData = player.props.seriesItem || player.props.item;
 
   // Check and setup CTAs
   const customItems = useMemo(() => {
