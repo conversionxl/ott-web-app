@@ -18,15 +18,17 @@ import useOpaqueId from '@jwp/ott-hooks-react/src/useOpaqueId';
 import { PATH_HOME, PATH_USER_PROFILES } from '@jwp/ott-common/src/paths';
 import { playlistURL } from '@jwp/ott-common/src/utils/urlFormatting';
 import env from '@jwp/ott-common/src/env';
+import { useOAuth } from '@jwp/ott-hooks-react/src/useOAuth';
 
-import Header from '../../components/Header/Header';
+import Header from '../../components/Header/Header-CXL';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import MenuButton from '../../components/MenuButton/MenuButton';
-import UserMenu from '../../components/UserMenu/UserMenu';
 import Button from '../../components/Button/Button';
 import Footer from '../../components/Footer/Footer';
+import UserMenu from '../../components/UserMenu/UserMenu';
+import OAuthBackToAccountButton from '../../components/OAuthBackToAccountButton/OAuthBackToAccountButton';
 
-import styles from './Layout.module.scss';
+import styles from './Layout-CXL.module.scss';
 
 const Layout = () => {
   const location = useLocation();
@@ -39,8 +41,26 @@ const Layout = () => {
   );
   const userMenuTitleId = useOpaqueId('usermenu-title');
   const isLoggedIn = !!useAccountStore(({ user }) => user);
+  const isPremium = !!useAccountStore(({ user }) => user)?.isPremium;
   const favoritesEnabled = !!config.features?.favoritesList;
   const { menu, assets, siteName, description, features, styling, custom } = config;
+
+  const customItems = useMemo(() => {
+    if (!custom) return [];
+
+    return Object.keys(custom)
+      .filter((key) => key.startsWith('navItem'))
+      .map((key) => {
+        const item = JSON.parse(custom[key] as string);
+        item.key = Math.random().toString();
+        return item;
+      });
+  }, [custom]);
+
+  const beforeItems = customItems.filter((item) => item.position === 'before');
+  const rightItems = customItems.filter((item) => item.position === 'right');
+  const afterItems = customItems.filter((item) => !['before', 'right'].includes(item.position));
+
   const metaDescription = description || t('default_description');
   const { footerText: configFooterText } = styling || {};
   const footerText = configFooterText || unicodeToChar(env.APP_FOOTER_TEXT);
@@ -50,6 +70,9 @@ const Layout = () => {
   const { searchPlaylist } = features || {};
   const hasAppContentSearch = isTruthyCustomParamValue(custom?.appContentSearch);
   const searchEnabled = !!searchPlaylist || hasAppContentSearch;
+
+  const isOAuthMode = isTruthyCustomParamValue(custom?.isOAuthMode);
+  const { login: oAuthLogin } = useOAuth();
 
   const currentLanguage = useMemo(() => supportedLanguages.find(({ code }) => code === i18n.language), [i18n.language, supportedLanguages]);
 
@@ -115,10 +138,20 @@ const Layout = () => {
   };
 
   const loginButtonClickHandler = () => {
+    // if user is in oauth mode, redirect to the login page
+    if (isOAuthMode) {
+      oAuthLogin();
+      return;
+    }
     navigate(modalURLFromLocation(location, 'login'));
   };
 
   const signUpButtonClickHandler = () => {
+    // if user is in oauth mode, redirect to the pricing page
+    if (isOAuthMode) {
+      window.location.replace(env.APP_OAUTH_SIGN_UP_URL as string);
+      return;
+    }
     navigate(modalURLFromLocation(location, 'create-account'));
   };
 
@@ -135,6 +168,15 @@ const Layout = () => {
   const renderUserActions = (sideBarOpen: boolean) => {
     if (!canLogin) return null;
 
+    // FEAT:: back to main account cta if oauth mode
+    if (isLoggedIn && isOAuthMode) {
+      return (
+        <section aria-labelledby={userMenuTitleId} className={styles.buttonContainer}>
+          <OAuthBackToAccountButton targetUrl={env.APP_OAUTH_DASHBOARD_URL as string} className={styles.backToAccount} />
+        </section>
+      );
+    }
+
     return isLoggedIn ? (
       <section aria-labelledby={userMenuTitleId}>
         <UserMenu focusable={sideBarOpen} favoritesEnabled={favoritesEnabled} titleId={userMenuTitleId} showPaymentsItem />
@@ -147,7 +189,13 @@ const Layout = () => {
     );
   };
 
-  const navItems = [{ label: t('home'), to: '/' }, ...menu.map((item) => ({ label: item.label, to: playlistURL(item.contentId) }))];
+  const navItems = [
+    { label: t('home'), to: '/' },
+    ...menu.map((item) => ({
+      label: item.label,
+      to: playlistURL(item.contentId),
+    })),
+  ];
 
   const containerProps = { inert: sideBarOpen ? '' : undefined }; // inert is not yet officially supported in react
 
@@ -181,6 +229,7 @@ const Layout = () => {
           supportedLanguages={supportedLanguages}
           currentLanguage={currentLanguage}
           isLoggedIn={isLoggedIn}
+          isPremium={isPremium}
           sideBarOpen={sideBarOpen}
           userMenuOpen={userMenuOpen}
           languageMenuOpen={languageMenuOpen}
@@ -200,7 +249,15 @@ const Layout = () => {
             isSelectingProfile: selectProfile.isLoading,
           }}
           navItems={navItems}
-        />
+          isOAuthMode={isOAuthMode}
+          beforeItems={beforeItems}
+          afterItems={afterItems}
+        >
+          <Button activeClassname={styles.headerButton} label={t('home')} to="/" variant="text" />
+          {menu.map((item) => (
+            <Button activeClassname={styles.headerButton} key={item.contentId} label={item.label} to={playlistURL(item.contentId)} variant="text" />
+          ))}
+        </Header>
         <main id="content" className={styles.main} tabIndex={-1}>
           <Outlet />
         </main>
@@ -211,12 +268,21 @@ const Layout = () => {
           <li>
             <MenuButton label={t('home')} to="/" />
           </li>
+          {beforeItems.map((item) => (
+            <MenuButton key={item.key} label={item.label} to={item.url} tabIndex={sideBarOpen ? 0 : -1} />
+          ))}
           {menu.map((item) => (
             <li key={item.contentId}>
               <MenuButton label={item.label} to={playlistURL(item.contentId)} />
             </li>
           ))}
+          {afterItems.map((item) => (
+            <MenuButton key={item.key} label={item.label} to={item.url} tabIndex={sideBarOpen ? 0 : -1} />
+          ))}
         </ul>
+        {rightItems.map((item) => (
+          <MenuButton key={item.key} label={item.label} to={item.url} tabIndex={sideBarOpen ? 0 : -1} />
+        ))}
         {renderUserActions(sideBarOpen)}
       </Sidebar>
     </div>

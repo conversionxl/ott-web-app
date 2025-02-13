@@ -8,6 +8,7 @@ import SearchIcon from '@jwp/ott-theme/assets/icons/search.svg?react';
 import CloseIcon from '@jwp/ott-theme/assets/icons/close.svg?react';
 import AccountCircle from '@jwp/ott-theme/assets/icons/account_circle.svg?react';
 import type { Profile } from '@jwp/ott-common/types/profiles';
+import env from '@jwp/ott-common/src/env';
 
 import SearchBar, { type Props as SearchBarProps } from '../SearchBar/SearchBar';
 import Logo from '../Logo/Logo';
@@ -20,8 +21,9 @@ import Panel from '../Panel/Panel';
 import Icon from '../Icon/Icon';
 import ProfileCircle from '../ProfileCircle/ProfileCircle';
 import Popover from '../Popover/Popover';
+import OAuthBackToAccountButton from '../OAuthBackToAccountButton/OAuthBackToAccountButton';
 
-import styles from './Header.module.scss';
+import styles from './Header-CXL.module.scss';
 
 type TypeHeader = 'static' | 'fixed';
 
@@ -47,6 +49,7 @@ type Props = {
   closeLanguageMenu: () => void;
   children?: ReactNode;
   isLoggedIn: boolean;
+  isPremium: boolean;
   sideBarOpen: boolean;
   userMenuOpen: boolean;
   languageMenuOpen: boolean;
@@ -58,6 +61,8 @@ type Props = {
   favoritesEnabled?: boolean;
   siteName?: string;
   navItems?: NavItem[];
+  beforeItems?: CustomMenuItem[];
+  afterItems?: CustomMenuItem[];
 
   profilesData?: {
     currentProfile: Profile | null;
@@ -66,6 +71,15 @@ type Props = {
     selectProfile: ({ avatarUrl, id }: { avatarUrl: string; id: string }) => void;
     isSelectingProfile: boolean;
   };
+  isOAuthMode?: boolean;
+  rightSideItems?: CustomMenuItem[];
+};
+
+type CustomMenuItem = {
+  label: string;
+  url: string;
+  position?: 'before' | 'right' | 'after';
+  key: string;
 };
 
 const Header: React.FC<Props> = ({
@@ -81,6 +95,7 @@ const Header: React.FC<Props> = ({
   onCloseSearchButtonClick,
   onSignUpButtonClick,
   isLoggedIn,
+  isPremium,
   sideBarOpen,
   userMenuOpen,
   languageMenuOpen,
@@ -97,6 +112,10 @@ const Header: React.FC<Props> = ({
   siteName,
   profilesData: { currentProfile, profiles, profilesEnabled, selectProfile, isSelectingProfile } = {},
   navItems = [],
+  isOAuthMode,
+  rightSideItems,
+  beforeItems = [],
+  afterItems = [],
 }) => {
   const { t } = useTranslation('menu');
   const [logoLoaded, setLogoLoaded] = useState(false);
@@ -106,7 +125,10 @@ const Header: React.FC<Props> = ({
   });
 
   // only show the language dropdown when there are other languages to choose from
-  const showLanguageSwitcher = supportedLanguages.length > 1;
+  let showLanguageSwitcher = supportedLanguages.length > 1;
+
+  // FEAT:: no language switcher in oauth mode
+  showLanguageSwitcher = !isOAuthMode;
 
   const renderSearch = () => {
     if (!searchEnabled) return null;
@@ -135,6 +157,11 @@ const Header: React.FC<Props> = ({
 
   const renderUserActions = () => {
     if (!canLogin || breakpoint <= Breakpoint.sm) return null;
+
+    // FEAT:: back to main account cta if oauth mode
+    if (isLoggedIn && isOAuthMode) {
+      return isPremium ? <OAuthBackToAccountButton targetUrl={env.APP_OAUTH_DASHBOARD_URL as string} className={styles.backToAccountButton} /> : null;
+    }
 
     return isLoggedIn ? (
       <React.Fragment>
@@ -208,13 +235,26 @@ const Header: React.FC<Props> = ({
     if (navItems.length === 0) {
       return children;
     }
+
     return (
       <ul>
+        {beforeItems.length > 0 &&
+          beforeItems.map((item, index) => (
+            <li key={index}>
+              <Button activeClassname={styles.navButton} label={item.label} to={item.url} variant="text" />
+            </li>
+          ))}
         {navItems.map((item, index) => (
           <li key={index}>
             <Button activeClassname={styles.navButton} label={item.label} to={item.to} variant="text" />
           </li>
         ))}
+        {afterItems.length > 0 &&
+          afterItems.map((item, index) => (
+            <li key={index}>
+              <Button activeClassname={styles.navButton} label={item.label} to={item.url} variant="text" />
+            </li>
+          ))}
       </ul>
     );
   };
@@ -236,6 +276,11 @@ const Header: React.FC<Props> = ({
           </div>
         )}
         <nav className={styles.nav}>{logoLoaded || !logoSrc ? renderNav() : null}</nav>
+        <div className={styles.customActions}>
+          {rightSideItems?.map((item) => (
+            <Button key={item.key} label={item.label} to={item.url} variant="text" />
+          ))}
+        </div>
         <div className={styles.actions}>
           {renderSearch()}
           {renderLanguageDropdown()}

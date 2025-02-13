@@ -138,6 +138,10 @@
   }
 }
 
+.backToAccountButton {
+  margin-left: #{variables.$base-spacing};
+}
+
 .actionButton {
   margin-left: calc(#{variables.$base-spacing} / 2);
 }
@@ -253,5 +257,12 @@
   .actions {
     justify-content: flex-end;
     width: 80px;
+  }
+}
+
+// Custom
+@include responsive.mobile-only() {
+  .customActions {
+    display: none;
   }
 }

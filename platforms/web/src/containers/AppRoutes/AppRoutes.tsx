@@ -18,7 +18,7 @@ import LegacySeries from '@jwp/ott-ui-react/src/pages/LegacySeries/LegacySeries'
 import RedirectToSSO from '@jwp/ott-ui-react/src/pages/RedirectToExternal/RedirectToSSO';
 import MediaScreenRouter from '@jwp/ott-ui-react/src/pages/ScreenRouting/MediaScreenRouter';
 import PlaylistScreenRouter from '@jwp/ott-ui-react/src/pages/ScreenRouting/PlaylistScreenRouter';
-import Layout from '@jwp/ott-ui-react/src/containers/Layout/Layout';
+import Layout from '@jwp/ott-ui-react/src/containers/Layout/Layout-CXL';
 import Profiles from '@jwp/ott-ui-react/src/containers/Profiles/Profiles';
 import CreateProfile from '@jwp/ott-ui-react/src/containers/Profiles/CreateProfile';
 import EditProfile from '@jwp/ott-ui-react/src/containers/Profiles/EditProfile';
