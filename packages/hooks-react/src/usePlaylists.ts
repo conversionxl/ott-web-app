@@ -17,9 +17,9 @@ const placeholderData = generatePlaylistPlaceholder(30);
 
 type UsePlaylistResult = {
   data: Playlist | undefined;
-  isLoading: boolean;
   isSuccess?: boolean;
   error?: unknown;
+  isPlaceholderData?: boolean;
 }[];
 
 const usePlaylists = (content: Content[], rowsToLoad: number | undefined = undefined) => {
@@ -72,13 +72,13 @@ const usePlaylists = (content: Content[], rowsToLoad: number | undefined = undef
       return { data: watchHistory, isLoading: false, isSuccess: true };
     }
 
-    const { data, isLoading, isSuccess, error } = playlistQueries[index];
+    const { data, isSuccess, error, isPlaceholderData } = playlistQueries[index];
 
     return {
       data,
-      isLoading,
       isSuccess,
       error,
+      isPlaceholderData,
     };
   });
 

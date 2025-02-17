@@ -131,6 +131,7 @@
 .actions {
   position: relative;
   display: flex;
+  gap: calc(variables.$base-spacing / 2);
 
   @include responsive.mobile-and-tablet() {
     // the search container wants to position itself against the header
@@ -138,51 +139,11 @@
   }
 }
 
-.backToAccountButton {
-  margin-left: #{variables.$base-spacing};
-}
-
-.actionButton {
-  margin-left: calc(#{variables.$base-spacing} / 2);
-}
-
 //
 // Header search
 //
 .search {
   max-width: 180px;
-}
-
-//
-// Header search container
-//
-.searchContainer {
-  position: absolute;
-  left: -#{variables.$search-bar-width-desktop};
-  display: flex;
-  width: variables.$search-bar-width-desktop;
-
-  > div:first-child {
-    flex: 1;
-  }
-
-  @include responsive.mobile-and-tablet() {
-    right: 0;
-    left: 0;
-    width: auto;
-  }
-}
-
-//
-// Container for the user button(s)
-//
-.buttonContainer {
-  // this is a visual fix for putting a button with background besides a transparent button
-  margin-left: variables.$base-spacing;
-
-  > button:first-child {
-    margin-right: calc(#{variables.$base-spacing} / 2);
-  }
 }
 
 .brandCentered {
@@ -235,8 +196,7 @@
   .searchActive {
     .menu,
     .brand,
-    .buttonContainer,
-    .actionButton {
+    .actions > *:not(:first-child) { // all action buttons except the search bar
       display: none;
     }
   }
@@ -257,12 +217,5 @@
   .actions {
     justify-content: flex-end;
     width: 80px;
-  }
-}
-
-// Custom
-@include responsive.mobile-only() {
-  .customActions {
-    display: none;
   }
 }
