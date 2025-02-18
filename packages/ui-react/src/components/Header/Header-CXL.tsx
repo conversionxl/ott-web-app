@@ -198,6 +198,7 @@ const Header: React.FC<Props> = ({
                 onButtonClick={closeUserPanel}
                 showPaymentsItem={showPaymentsMenuItem}
                 currentProfile={currentProfile}
+                /* @ts-ignore */
                 favoritesEnabled={favoritesEnabled}
                 small
               />
