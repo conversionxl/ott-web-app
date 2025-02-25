@@ -7,7 +7,7 @@ import { testId } from '@jwp/ott-common/src/utils/common';
 import { logInfo } from '@jwp/ott-common/src/logger';
 import useEventCallback from '@jwp/ott-hooks-react/src/useEventCallback';
 import useOttAnalytics from '@jwp/ott-hooks-react/src/useOttAnalytics';
-import { attachAnalyticsParams } from '@jwp/ott-common/src/utils/analytics';
+import { useMediaSources } from '@jwp/ott-hooks-react/src/useMediaSources';
 import env from '@jwp/ott-common/src/env';
 
 import type { JWPlayer } from '../../../types/jwplayer';
@@ -31,6 +31,7 @@ type Props = {
   onFirstFrame?: () => void;
   onRemove?: () => void;
   onNext?: () => void;
+  onBackClick?: () => void;
   onPlaylistItem?: () => void;
   onPlaylistItemCallback?: (item: PlaylistItem) => Promise<undefined | PlaylistItem>;
 };
@@ -50,6 +51,7 @@ const Player: React.FC<Props> = ({
   onPlaylistItem,
   onPlaylistItemCallback,
   onNext,
+  onBackClick,
   feedId,
   startTime = 0,
   autostart,
@@ -57,8 +59,10 @@ const Player: React.FC<Props> = ({
   const playerElementRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<JWPlayer>();
   const loadingRef = useRef(false);
+  const backClickRef = useRef(false);
   const [libLoaded, setLibLoaded] = useState(!!window.jwplayer);
   const startTimeRef = useRef(startTime);
+  const sources = useMediaSources({ item, baseUrl: env.APP_API_BASE_URL });
 
   const setPlayer = useOttAnalytics(item, feedId);
 
@@ -87,6 +91,10 @@ const Player: React.FC<Props> = ({
   const handlePlaylistItem = useEventCallback(onPlaylistItem);
   const handlePlaylistItemCallback = useEventCallback(onPlaylistItemCallback);
   const handleNextClick = useEventCallback(onNext);
+  const handleBackClick = useEventCallback(() => {
+    backClickRef.current = true;
+    onBackClick?.();
+  });
   const handleReady = useEventCallback(() => onReady && onReady(playerRef.current));
 
   const attachEvents = useCallback(() => {
@@ -101,6 +109,7 @@ const Player: React.FC<Props> = ({
     playerRef.current?.on('remove', handleRemove);
     playerRef.current?.on('playlistItem', handlePlaylistItem);
     playerRef.current?.on('nextClick', handleNextClick);
+    playerRef.current?.on('backClick', handleBackClick);
     playerRef.current?.setPlaylistItemCallback(handlePlaylistItemCallback);
   }, [
     handleReady,
@@ -115,6 +124,7 @@ const Player: React.FC<Props> = ({
     handlePlaylistItem,
     handleNextClick,
     handlePlaylistItemCallback,
+    handleBackClick,
   ]);
 
   const detachEvents = useCallback(() => {
@@ -174,10 +184,6 @@ const Player: React.FC<Props> = ({
 
       playerRef.current = window.jwplayer(playerElementRef.current) as JWPlayer;
 
-      // Inject user_id and profile_id into the CDN analytics
-      // @todo this currently depends on stores
-      attachAnalyticsParams(item);
-
       // Player options are untyped
       const playerOptions: { [key: string]: unknown } = {
         advertising: {
@@ -200,7 +206,7 @@ const Player: React.FC<Props> = ({
         mute: false,
         playbackRateControls: true,
         pipIcon: 'disabled',
-        playlist: [deepCopy({ ...item, starttime: startTimeRef.current, feedid: feedId })],
+        playlist: [deepCopy({ ...item, starttime: startTimeRef.current, feedid: feedId, sources })],
         repeat: false,
         cast: {},
         stretching: 'uniform',
@@ -230,17 +236,21 @@ const Player: React.FC<Props> = ({
     if (libLoaded) {
       initializePlayer();
     }
-  }, [libLoaded, item, detachEvents, attachEvents, playerId, setPlayer, autostart, adsData, playerLicenseKey, feedId]);
+  }, [libLoaded, item, detachEvents, attachEvents, playerId, setPlayer, autostart, adsData, playerLicenseKey, sources, feedId]);
 
   useEffect(() => {
     return () => {
       if (playerRef.current) {
         // Detaching events before component unmount
         detachEvents();
+        if (backClickRef.current) {
+          backClickRef.current = false;
+          return;
+        }
         playerRef.current.remove();
       }
     };
-  }, [detachEvents]);
+  }, [detachEvents, backClickRef]);
 
   return (
     <div className={styles.container} data-testid={testId('player-container')}>

@@ -29,12 +29,14 @@ const VideoDetailsInline: React.FC<Props> = ({ title, description, primaryMetada
       <TitleComponent className={styles.title}>{title}</TitleComponent>
       <div className={styles.inlinePlayerMetadata}>
         <div className={styles.primaryMetadata}>{primaryMetadata}</div>
-        {trailerButton}
-        {favoriteButton}
-        {shareButton}
-        {extraButtons.map((button, index) => (
-          <React.Fragment key={index}>{button}</React.Fragment>
-        ))}
+        <div className={styles.buttonBar}>
+          {trailerButton}
+          {favoriteButton}
+          {shareButton}
+          {extraButtons.map((button, index) => (
+            <React.Fragment key={index}>{button}</React.Fragment>
+          ))}
+        </div>
       </div>
       {isMobile ? (
         <CollapsibleText text={description} className={styles.description} />
