@@ -12,6 +12,7 @@ export type Env = {
   APP_BODY_ALT_FONT?: string;
 
   // Following are OAuth related
+  APP_OAUTH_ENABLED?: boolean;
   APP_OAUTH_CLIENT_ID?: string;
   APP_OAUTH_CLIENT_SECRET?: string;
   APP_OAUTH_STORAGE?: 'session' | 'local';
@@ -47,6 +48,7 @@ export const configureEnv = (options: Partial<Env>) => {
   env.APP_BODY_FONT = options.APP_BODY_FONT || env.APP_BODY_FONT;
   env.APP_BODY_ALT_FONT = options.APP_BODY_ALT_FONT || env.APP_BODY_ALT_FONT;
 
+  env.APP_OAUTH_ENABLED ||= options.APP_OAUTH_ENABLED;
   env.APP_OAUTH_CLIENT_ID ||= options.APP_OAUTH_CLIENT_ID;
   env.APP_OAUTH_CLIENT_SECRET ||= options.APP_OAUTH_CLIENT_SECRET;
   env.APP_OAUTH_STORAGE ||= options.APP_OAUTH_STORAGE;

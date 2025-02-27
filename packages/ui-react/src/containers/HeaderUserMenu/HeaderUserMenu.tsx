@@ -5,7 +5,7 @@ import { useAccountStore } from '@jwp/ott-common/src/stores/AccountStore';
 import { ACCESS_MODEL } from '@jwp/ott-common/src/constants';
 import { useLocation, useNavigate } from 'react-router';
 
-import UserMenu from '../../components/UserMenu/UserMenu';
+import UserMenu from '../../components/UserMenu/UserMenu-CXL';
 import useBreakpoint, { Breakpoint } from '../../hooks/useBreakpoint';
 import { modalURLFromLocation } from '../../utils/location';
 

@@ -26,6 +26,7 @@ configureEnv({
   APP_BODY_ALT_FONT: import.meta.env.APP_BODY_ALT_FONT,
 
   // Following are the OAuth related
+  APP_OAUTH_ENABLED: import.meta.env.APP_OAUTH_ENABLED,
   APP_OAUTH_CLIENT_ID: import.meta.env.APP_OAUTH_CLIENT_ID,
   APP_OAUTH_CLIENT_SECRET: import.meta.env.APP_OAUTH_CLIENT_SECRET,
   APP_OAUTH_STORAGE: ['local', 'session'].includes(import.meta.env.APP_OAUTH_STORAGE as string)
