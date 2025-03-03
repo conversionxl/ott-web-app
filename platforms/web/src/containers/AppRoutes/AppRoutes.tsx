@@ -11,7 +11,7 @@ import LegacySeries from '@jwp/ott-ui-react/src/pages/LegacySeries/LegacySeries'
 import RedirectToSSO from '@jwp/ott-ui-react/src/pages/RedirectToExternal/RedirectToSSO';
 import MediaScreenRouter from '@jwp/ott-ui-react/src/pages/ScreenRouting/MediaScreenRouter';
 import PlaylistScreenRouter from '@jwp/ott-ui-react/src/pages/ScreenRouting/PlaylistScreenRouter';
-import Layout from '@jwp/ott-ui-react/src/containers/Layout/Layout';
+import Layout from '@jwp/ott-ui-react/src/containers/Layout/Layout-CXL';
 import { PATH_ABOUT, PATH_CONTENT_LIST, PATH_LEGACY_SERIES, PATH_MEDIA, PATH_PLAYLIST, PATH_SEARCH, PATH_USER } from '@jwp/ott-common/src/paths';
 import { PLAYLIST_TYPE } from '@jwp/ott-common/src/constants';
 
