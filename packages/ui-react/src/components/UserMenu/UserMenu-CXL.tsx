@@ -66,27 +66,29 @@ const UserMenu = ({ isLoggedIn, favoritesEnabled, open, onClose, onOpen, onLogin
     );
   }
 
-  return (
-    <div>
-      <HeaderActionButton
-        aria-label={t('open_user_menu')}
-        aria-controls="menu_panel"
-        aria-expanded={open}
-        aria-haspopup="menu"
-        onClick={onOpen}
-        onBlur={onClose}
-      >
-        <Icon icon={AccountCircle} />
-      </HeaderActionButton>
-      <Popover className={styles.popover} isOpen={open} onClose={onClose}>
-        <Panel id="menu_panel">
-          <div onFocus={onOpen} onBlur={onClose}>
-            <UserMenuNav focusable={open} onButtonClick={onClose} showPaymentItems={true} favoritesEnabled={favoritesEnabled} small />
-          </div>
-        </Panel>
-      </Popover>
-    </div>
-  );
+  if (!isOAuthMode) {
+    return (
+      <div>
+        <HeaderActionButton
+          aria-label={t('open_user_menu')}
+          aria-controls="menu_panel"
+          aria-expanded={open}
+          aria-haspopup="menu"
+          onClick={onOpen}
+          onBlur={onClose}
+        >
+          <Icon icon={AccountCircle} />
+        </HeaderActionButton>
+        <Popover className={styles.popover} isOpen={open} onClose={onClose}>
+          <Panel id="menu_panel">
+            <div onFocus={onOpen} onBlur={onClose}>
+              <UserMenuNav focusable={open} onButtonClick={onClose} showPaymentItems={true} favoritesEnabled={favoritesEnabled} small />
+            </div>
+          </Panel>
+        </Popover>
+      </div>
+    );
+  }
 };
 
 export default UserMenu;
