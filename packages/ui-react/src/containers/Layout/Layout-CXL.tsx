@@ -94,7 +94,7 @@ const Layout = () => {
               <Button key={index} label={item.label} to={item.to} variant="text" />
             ))}
             <HeaderSearch />
-            <HeaderLanguageSwitcher />
+            {!env.APP_OAUTH_ENABLED && <HeaderLanguageSwitcher />}
             <HeaderUserMenu />
           </HeaderActions>
         </Header>
