@@ -8,12 +8,10 @@ import { useOAuth } from '@jwp/ott-hooks-react/src/useOAuth';
 import useOpaqueId from '@jwp/ott-hooks-react/src/useOpaqueId';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router';
 
 import Button from '../../components/Button/Button';
 import MenuButton from '../../components/MenuButton/MenuButton';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { modalURLFromLocation } from '../../utils/location';
 
 import styles from './SidebarContainer-CXL.module.scss';
 
@@ -56,8 +54,6 @@ const SidebarUserActions = ({
 
 const SidebarContainer = () => {
   const { t } = useTranslation('common');
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const sideBarOpen = useUIStore((state) => state.sideBarOpen);
   const {
@@ -81,7 +77,7 @@ const SidebarContainer = () => {
   };
 
   const signUpButtonClickHandler = () => {
-    navigate(modalURLFromLocation(location, 'create-account'));
+    window.location.href = env.APP_OAUTH_SIGN_UP_URL as string;
   };
 
   const customItems = useMemo(() => {

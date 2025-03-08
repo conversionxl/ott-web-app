@@ -1,7 +1,6 @@
 import env from '@jwp/ott-common/src/env';
 import { useAccountStore } from '@jwp/ott-common/src/stores/AccountStore';
 import { shallow } from '@jwp/ott-common/src/utils/compare';
-import { useOAuth } from '@jwp/ott-hooks-react/src/useOAuth';
 import AccountCircle from '@jwp/ott-theme/assets/icons/account_circle.svg?react';
 import { useTranslation } from 'react-i18next';
 
@@ -27,27 +26,16 @@ type Props = {
 const UserMenu = ({ isLoggedIn, favoritesEnabled, open, onClose, onOpen, onLoginButtonClick, onSignUpButtonClick }: Props) => {
   const { t } = useTranslation('menu');
 
-  const { login: oAuthLogin } = useOAuth();
-
   const isOAuthMode = env.APP_OAUTH_ENABLED;
 
   const { user } = useAccountStore(({ user }) => ({ user }), shallow);
 
   const isPremium = user?.isPremium;
 
-  // If OAuth is enabled, use the oAuthLogin function.
-  const customOnLoginButtonClick = () => {
-    if (isOAuthMode) {
-      oAuthLogin();
-    } else {
-      onLoginButtonClick();
-    }
-  };
-
   if (!isLoggedIn) {
     return (
       <>
-        <Button onClick={customOnLoginButtonClick} label={t('sign_in')} aria-haspopup="dialog" />
+        <Button onClick={onLoginButtonClick} label={t('sign_in')} aria-haspopup="dialog" />
         <Button variant="contained" color="primary" onClick={onSignUpButtonClick} label={t('sign_up')} aria-haspopup="dialog" />
       </>
     );

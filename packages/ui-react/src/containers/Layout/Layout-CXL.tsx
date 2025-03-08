@@ -19,7 +19,7 @@ import HeaderNavigation from '../../components/Header/HeaderNavigation';
 import HeaderSkipLink from '../../components/Header/HeaderSkipLink';
 import HeaderLanguageSwitcher from '../HeaderLanguageSwitcher/HeaderLanguageSwitcher';
 import HeaderSearch from '../HeaderSearch/HeaderSearch';
-import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu';
+import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu-CXL';
 import SidebarContainer from '../SidebarContainer/SidebarContainer-CXL';
 import SiteMetadata from '../SiteMetadata/SiteMetadata';
 
