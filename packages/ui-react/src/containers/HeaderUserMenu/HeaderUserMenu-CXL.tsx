@@ -1,18 +1,16 @@
-import React, { useCallback } from 'react';
-import { useUIStore } from '@jwp/ott-common/src/stores/UIStore';
-import { useConfigStore } from '@jwp/ott-common/src/stores/ConfigStore';
-import { useAccountStore } from '@jwp/ott-common/src/stores/AccountStore';
 import { ACCESS_MODEL } from '@jwp/ott-common/src/constants';
-import { useLocation, useNavigate } from 'react-router';
+import env from '@jwp/ott-common/src/env';
+import { useAccountStore } from '@jwp/ott-common/src/stores/AccountStore';
+import { useConfigStore } from '@jwp/ott-common/src/stores/ConfigStore';
+import { useUIStore } from '@jwp/ott-common/src/stores/UIStore';
+import { useOAuth } from '@jwp/ott-hooks-react/src/useOAuth';
+import { useCallback } from 'react';
 
 import UserMenu from '../../components/UserMenu/UserMenu-CXL';
 import useBreakpoint, { Breakpoint } from '../../hooks/useBreakpoint';
-import { modalURLFromLocation } from '../../utils/location';
 
 const HeaderUserMenu = () => {
   const breakpoint = useBreakpoint();
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const userMenuOpen = useUIStore((state) => state.userMenuOpen);
   const {
@@ -30,8 +28,15 @@ const HeaderUserMenu = () => {
   const openUserPanel = useCallback(() => useUIStore.setState({ userMenuOpen: true }), []);
   const closeUserPanel = useCallback(() => useUIStore.setState({ userMenuOpen: false }), []);
 
-  const loginButtonClickHandler = () => navigate(modalURLFromLocation(location, 'login'));
-  const signUpButtonClickHandler = () => navigate(modalURLFromLocation(location, 'create-account'));
+  const { login: oAuthLogin } = useOAuth();
+
+  const loginButtonClickHandler = () => {
+    oAuthLogin();
+  };
+
+  const signUpButtonClickHandler = () => {
+    window.location.href = env.APP_OAUTH_SIGN_UP_URL as string;
+  };
 
   if (!canLogin || breakpoint <= Breakpoint.sm) return null;
 

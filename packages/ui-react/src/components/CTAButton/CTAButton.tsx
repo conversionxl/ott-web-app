@@ -17,7 +17,16 @@ export type CTAItem = {
 const CTAButton = ({ label, url }: Props) => {
   const breakpoint = useBreakpoint();
 
-  return <Button label={label} to={url} fullWidth={breakpoint < Breakpoint.md} target="_blank" />;
+  return (
+    <Button
+      label={label}
+      fullWidth={breakpoint < Breakpoint.md}
+      onClick={() => {
+        window.location.href = url;
+      }}
+      target="_blank"
+    />
+  );
 };
 
 export default CTAButton;
