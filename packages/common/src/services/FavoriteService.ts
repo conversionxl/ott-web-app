@@ -57,7 +57,7 @@ export default class FavoriteService {
     return this.validateFavorites(favorites);
   }
 
-  getFavorites = async (user: Customer | null, favoritesList: string) => {
+  getFavorites = async (user: Customer | null, favoritesList: string, language?: string) => {
     // FEAT:: show favorites list from local storage
     const fromLocalStorage = !user || user?.isOAuthMode;
 
@@ -69,7 +69,7 @@ export default class FavoriteService {
     }
 
     try {
-      const playlistItems = await this.apiService.getMediaByWatchlist(favoritesList, mediaIds);
+      const playlistItems = await this.apiService.getMediaByWatchlist({ playlistId: favoritesList, mediaIds, language });
 
       return (playlistItems || []).map((item) => this.createFavorite(item));
     } catch (error: unknown) {
