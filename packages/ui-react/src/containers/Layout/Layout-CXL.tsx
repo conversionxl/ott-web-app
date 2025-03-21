@@ -1,10 +1,9 @@
-import { PLAYLIST_TYPE } from '@jwp/ott-common/src/constants';
 import env from '@jwp/ott-common/src/env';
 import { useConfigStore } from '@jwp/ott-common/src/stores/ConfigStore';
 import { useUIStore } from '@jwp/ott-common/src/stores/UIStore';
 import { unicodeToChar } from '@jwp/ott-common/src/utils/common';
 import { shallow } from '@jwp/ott-common/src/utils/compare';
-import { contentListURL, playlistURL } from '@jwp/ott-common/src/utils/urlFormatting';
+import { determinePath } from '@jwp/ott-common/src/utils/urlFormatting';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router';
@@ -52,7 +51,7 @@ const Layout = () => {
     { label: t('home'), to: '/' },
     ...menu.map(({ label, contentId, type }) => ({
       label,
-      to: type === PLAYLIST_TYPE.content_list ? contentListURL(contentId) : playlistURL(contentId),
+      to: determinePath({ type, contentId, label }),
     })),
   ];
 

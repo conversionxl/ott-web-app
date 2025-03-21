@@ -27,14 +27,16 @@ const useContentProtection = <T>(
   const user = useAccountStore((state) => state.user);
   const { token: bearerToken } = useOAuth();
 
-  const { configId, signingConfig, contentProtection, jwp, urlSigning, isOAuthMode } = useConfigStore(({ config }) => ({
+  const { configId, signingConfig, contentProtection, jwp, urlSigning, isAccessBridgeEnabled, isOAuthMode } = useConfigStore(({ config, settings }) => ({
     configId: config.id,
     signingConfig: config.contentSigningService,
     contentProtection: config.contentProtection,
     jwp: config.integrations.jwp,
     urlSigning: isTruthyCustomParamValue(config?.custom?.urlSigning),
+    isAccessBridgeEnabled: !!settings?.apiAccessBridgeUrl,
     isOAuthMode: isTruthyCustomParamValue(config?.custom?.isOAuthMode),
   }));
+
   const host = signingConfig?.host;
   const drmPolicyId = contentProtection?.drm?.defaultPolicyId ?? signingConfig?.drmPolicyId;
   const signingEnabled = !!urlSigning || !!host || (!!drmPolicyId && !host);
@@ -50,6 +52,7 @@ const useContentProtection = <T>(
 
         return genericEntitlementService.getMediaToken(host, id, authData?.jwt, params, drmPolicyId);
       }
+
       // if provider is JWP
       if (jwp && configId && !!id && signingEnabled) {
         return jwpEntitlementService.getJWPMediaToken(configId, id);
@@ -63,7 +66,8 @@ const useContentProtection = <T>(
       }
     },
     {
-      enabled: signingEnabled && enabled && !!id && (isOAuthMode ? (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user?.isPremium : true) : false),
+      enabled:
+        signingEnabled && enabled && !!id && !isAccessBridgeEnabled && (isOAuthMode ? (env.APP_OAUTH_UNLOCK_ONLY_PREMIUM ? !!user?.isPremium : true) : false),
       keepPreviousData: false,
       staleTime: 15 * 60 * 1000,
     },

@@ -1,9 +1,9 @@
-import { ACCESS_MODEL, PLAYLIST_TYPE } from '@jwp/ott-common/src/constants';
+import { ACCESS_MODEL } from '@jwp/ott-common/src/constants';
 import env from '@jwp/ott-common/src/env';
 import { useAccountStore } from '@jwp/ott-common/src/stores/AccountStore';
 import { useConfigStore } from '@jwp/ott-common/src/stores/ConfigStore';
 import { useUIStore } from '@jwp/ott-common/src/stores/UIStore';
-import { contentListURL, playlistURL } from '@jwp/ott-common/src/utils/urlFormatting';
+import { determinePath } from '@jwp/ott-common/src/utils/urlFormatting';
 import { useOAuth } from '@jwp/ott-hooks-react/src/useOAuth';
 import useOpaqueId from '@jwp/ott-hooks-react/src/useOpaqueId';
 import { useMemo } from 'react';
@@ -109,7 +109,7 @@ const SidebarContainer = () => {
         ))}
         {menu.map(({ contentId, type, label }) => (
           <li key={contentId}>
-            <MenuButton label={label} to={type === PLAYLIST_TYPE.content_list ? contentListURL(contentId) : playlistURL(contentId)} />
+            <MenuButton label={label} to={determinePath({ type, contentId })} />
           </li>
         ))}
         {afterItems.map(({ label, to }) => (

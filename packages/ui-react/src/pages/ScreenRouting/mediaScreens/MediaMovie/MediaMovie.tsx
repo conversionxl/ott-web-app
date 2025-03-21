@@ -68,8 +68,8 @@ const MediaMovie: ScreenComponent<PlaylistItem> = ({ data, isLoading }) => {
   const { isLoading: isPlaylistLoading, data: playlist } = usePlaylist(features?.recommendationsPlaylist || '', { related_media_id: id });
 
   // Handlers
-  const goBack = () => data && navigate(mediaURL({ media: data, playlistId: feedId, play: false }));
-  const getUrl = (item: PlaylistItem) => mediaURL({ media: item, playlistId: features?.recommendationsPlaylist });
+  const goBack = () => data && navigate(mediaURL({ id: data.mediaid, title: data.title, playlistId: feedId, play: false }));
+  const getUrl = (item: PlaylistItem) => mediaURL({ id: item.mediaid, title: item.title, playlistId: features?.recommendationsPlaylist });
 
   const handleComplete = useCallback(() => {
     if (!id || !playlist) return;
@@ -77,7 +77,7 @@ const MediaMovie: ScreenComponent<PlaylistItem> = ({ data, isLoading }) => {
     const index = playlist.playlist.findIndex(({ mediaid }) => mediaid === id);
     const nextItem = playlist.playlist[index + 1];
 
-    return nextItem && navigate(mediaURL({ media: nextItem, playlistId: features?.recommendationsPlaylist, play: true }));
+    return nextItem && navigate(mediaURL({ id: nextItem.mediaid, title: nextItem.title, playlistId: features?.recommendationsPlaylist, play: true }));
   }, [id, playlist, navigate, features?.recommendationsPlaylist]);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const MediaMovie: ScreenComponent<PlaylistItem> = ({ data, isLoading }) => {
 
   // UI
   const pageTitle = `${data.title} - ${siteName}`;
-  const canonicalUrl = data ? `${window.location.origin}${mediaURL({ media: data })}` : window.location.href;
+  const canonicalUrl = data ? `${window.location.origin}${mediaURL({ id: data.mediaid, title: data.title })}` : window.location.href;
 
   const primaryMetadata = <VideoMetaData attributes={createVideoMetadata(data)} />;
   const shareButton = <ShareButton title={data.title} description={data.description} url={canonicalUrl} />;
@@ -95,7 +95,7 @@ const MediaMovie: ScreenComponent<PlaylistItem> = ({ data, isLoading }) => {
     <StartWatchingButton
       key={id} // necessary to fix autofocus on TalkBack
       item={data}
-      playUrl={mediaURL({ media: data, playlistId: feedId, play: true })}
+      playUrl={mediaURL({ id: data.mediaid, title: data.title, playlistId: feedId, play: true })}
     />
   );
 
