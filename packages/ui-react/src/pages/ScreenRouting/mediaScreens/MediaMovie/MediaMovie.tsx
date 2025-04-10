@@ -87,9 +87,13 @@ const MediaMovie: ScreenComponent<PlaylistItem> = ({ data, isLoading }) => {
 
   // UI
   const pageTitle = `${data.title} - ${siteName}`;
-  const canonicalUrl = data ? `${window.location.origin}${mediaURL({ id: data.mediaid, title: data.title })}` : window.location.href;
+  const canonicalUrl = data ? `${env.APP_PUBLIC_URL}${mediaURL({ id: data.mediaid, title: data.title })}` : window.location.href;
 
-  const primaryMetadata = <VideoMetaData attributes={createVideoMetadata(data)} />;
+  const primaryMetadata = (
+    <VideoMetaData
+      attributes={createVideoMetadata(data, { hoursAbbreviation: t('common:abbreviation.hours'), minutesAbbreviation: t('common:abbreviation.minutes') })}
+    />
+  );
   const shareButton = <ShareButton title={data.title} description={data.description} url={canonicalUrl} />;
   const startWatchingButton = (
     <StartWatchingButton
@@ -136,7 +140,7 @@ const MediaMovie: ScreenComponent<PlaylistItem> = ({ data, isLoading }) => {
         {data.tags?.split(',').map((tag) => (
           <meta property="og:video:tag" content={tag} key={tag} />
         ))}
-        {data ? <script type="application/ld+json">{generateMovieJSONLD(data, window.location.origin)}</script> : null}
+        {data ? <script type="application/ld+json">{generateMovieJSONLD(data, env.APP_PUBLIC_URL)}</script> : null}
       </Helmet>
       <VideoLayout
         item={data}
