@@ -121,11 +121,17 @@ const LegacySeries = () => {
 
   const pageTitle = `${selectedItem.title} - ${siteName}`;
   const pageDescription = selectedItem?.description || '';
-  const canonicalUrl = `${window.location.origin}${legacySeriesURL({ episodeId: episode?.mediaid, seriesId })}`;
+  const canonicalUrl = `${env.APP_PUBLIC_URL}${legacySeriesURL({ episodeId: episode?.mediaid, seriesId })}`;
   const backgroundImage = (selectedItem.backgroundImage as string) || undefined;
 
   const primaryMetadata = episode ? (
-    <VideoMetaData attributes={createVideoMetadata(episode, t('video:total_episodes', { count: seriesPlaylist?.playlist?.length }))} />
+    <VideoMetaData
+      attributes={createVideoMetadata(episode, {
+        episodesLabel: t('video:total_episodes', { count: seriesPlaylist?.playlist?.length }),
+        hoursAbbreviation: t('common:abbreviation.hours'),
+        minutesAbbreviation: t('common:abbreviation.minutes'),
+      })}
+    />
   ) : (
     <VideoMetaData attributes={createPlaylistMetadata(seriesPlaylist, t('video:total_episodes', { count: seriesPlaylist?.playlist?.length }))} />
   );
