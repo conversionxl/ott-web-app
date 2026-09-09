@@ -91,6 +91,6 @@
   "optionalDependencies": {
     "gh-pages": "^6.1.1",
     "lighthouse": "^12.1.0",
-    "sharp": "^0.33.4"
+    "sharp": "^0.35.4"
   }
 }
